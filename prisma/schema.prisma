@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  nama       String
+  email      String   @unique
+  password   String
+  role       Role     // Admin, Petugas, atau Orang Tua
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relasi
+  balita     Balita[]
+}
+
+model Balita {
+  id           String   @id @default(uuid())
+  nama         String
+  tanggalLahir DateTime
+  jenisKelamin JenisKelamin
+  beratBadan   Float?
+  tinggiBadan  Float?
+  orangTuaId   String?  // Bisa null jika belum ditentukan orang tua
+
+  // Relasi ke User
+  orangTua   User?      @relation(fields: [orangTuaId], references: [id])
+  rekamMedis RekamMedis[]
+}
+
+model JadwalKegiatan {
+  id        String   @id @default(uuid())
+  kegiatan  String
+  deskripsi String?
+  tanggal   DateTime
+  lokasi    String
+
+  // Relasi
+  layanan   Layanan[]
+}
+
+model Layanan {
+  id          String   @id @default(uuid())
+  namaLayanan String
+  deskripsi   String?
+  jadwalId    String?  // Bisa null jika belum ada jadwal terkait
+
+  // Relasi ke JadwalKegiatan
+  jadwal JadwalKegiatan? @relation(fields: [jadwalId], references: [id])
+}
+
+model RekamMedis {
+  id           String   @id @default(uuid())
+  tanggal      DateTime @default(now())
+  beratBadan   Float?
+  tinggiBadan  Float?
+  imunisasi    String?
+  catatan      String?
+  balitaId     String?  // Bisa null jika data balita belum diinput
+
+  // Relasi ke Balita (opsional)
+  balita Balita? @relation(fields: [balitaId], references: [id])
+}
+
+// Enums untuk data tetap
+enum Role {
+  ADMIN
+  PETUGAS
+  ORANG_TUA
+}
+
+enum JenisKelamin {
+  LAKI_LAKI
+  PEREMPUAN
+}
