@@ -72,7 +72,6 @@ model RekamMedis {
 enum Role {
   ADMIN
   PETUGAS
-  ORANG_TUA
 }
 
 enum JenisKelamin {
