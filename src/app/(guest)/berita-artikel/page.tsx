@@ -1,11 +1,10 @@
 import Image from "next/image"
+import Link from "next/link"
 import { ArtikelData } from "@/constants/artikeldata"
 
 import CardBeritaArtikel from "@/components/CardBeritaArtikel"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
-
-import ArticleNews from "../article-news"
 
 export default function BeritaArtikelPage() {
   return (
@@ -45,13 +44,15 @@ export default function BeritaArtikelPage() {
         <h2 className="text-2xl font-bold">List Berita & Artikel</h2>
 
         <div className="mt-5 flex w-fit flex-wrap gap-2">
-          {ArtikelData.map(({ title, img, desc }, index) => (
-            <CardBeritaArtikel
-              key={index}
-              img={img}
-              title={title}
-              desc={desc}
-            />
+          {ArtikelData.map(({ id, title, img, desc }, index) => (
+            <Link href={`/berita-artikel/${id}`}>
+              <CardBeritaArtikel
+                key={index}
+                img={img}
+                title={title}
+                desc={desc}
+              />
+            </Link>
           ))}
         </div>
       </section>

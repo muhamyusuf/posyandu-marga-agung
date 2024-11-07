@@ -30,7 +30,7 @@ export default function Navbar() {
             </Link>
 
             <Link
-              href="berita-artikel"
+              href="/berita-artikel"
               className="flex items-center text-sm font-medium transition-colors duration-300 ease-in-out hover:text-primary"
               prefetch={false}
             >
