@@ -12,7 +12,7 @@ export default function DashboardLayout({
       <main>
         <SidebarTrigger />
 
-        <div className="p-10">{children}</div>
+        <div className="px-2 py-16 md:p-16">{children}</div>
       </main>
     </SidebarProvider>
   )

@@ -1,3 +1,5 @@
+import Image from "next/image"
+import Link from "next/link"
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
 
 import {
@@ -44,6 +46,18 @@ export function AppSidebar() {
     <Sidebar className="border-none">
       <SidebarContent>
         <SidebarGroup>
+          <Link href="/" className="flex items-center" prefetch={false}>
+            <Image
+              src="/logo-posyandu.png"
+              width={1000}
+              height={1000}
+              alt="Posyandu Marga Agung"
+              className="h-12 w-16"
+            />
+
+            <span className="sr-only">Posyandu Marga Agung</span>
+          </Link>
+
           <SidebarGroupLabel>Dashboard Posyandu Marga Agung</SidebarGroupLabel>
 
           <SidebarGroupContent className="mt-10">
