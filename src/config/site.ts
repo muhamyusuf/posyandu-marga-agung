@@ -6,7 +6,7 @@ export const siteConfig: SiteConfig = {
   name: "Posyandu Marga Agung",
   author: "Team KSI Marga Agung",
   description:
-    "Posyandu Marga Agung adalah aplikasi yang digunakan untuk mencatat data posyandu di Marga Agung",
+    "Posyandu Marga Agung adalah website yang digunakan untuk mencatat data posyandu di Desa Marga Agung",
   keywords: ["Next.js", "React", "Tailwind CSS", "Radix UI", "shadcn/ui"],
   url: {
     base: env.NEXT_PUBLIC_APP_URL,

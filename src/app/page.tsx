@@ -1,4 +1,6 @@
+import Image from "next/image"
 import Link from "next/link"
+import { contents } from "@/constants/artikeldata"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
@@ -13,65 +15,84 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Icons } from "@/components/icons"
-import { ModeToggle } from "@/components/mode-toggle"
+import { CalendarDemo } from "@/components/calendar"
+import CardBeritaArtikel from "@/components/CardBeritaArtikel"
+import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
 
 export default function Home() {
   return (
-    <main className="flex h-screen items-center justify-center">
+    <main className="container min-h-screen">
       <Navbar />
 
-      <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center">
-        {/* <Icons.logo className="w-16 h-16" /> */}
+      <section className="container mt-40 flex max-w-[64rem] flex-col items-center gap-4 text-center">
+        <div className="flex flex-col items-center gap-5 md:flex-row">
+          <Image
+            src="/logo-posyandu.png"
+            width={1000}
+            height={1000}
+            alt="Posyandu Marga Agung"
+            className="h-32 w-36 rounded-md border"
+          />
+
+          <Image
+            src="/logo-sgds.png"
+            width={1000}
+            height={1000}
+            alt="Posyandu Marga Agung"
+            className="h-32 w-36 rounded-md border"
+          />
+        </div>
+
         <h1 className="text-4xl font-semibold sm:text-5xl md:text-6xl lg:text-7xl">
           {siteConfig.name}
         </h1>
+
         <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
           {siteConfig.description}
         </p>
-        <div className="flex gap-2">
-          <Link
-            href={siteConfig.links.github}
-            target="_blank"
-            className={cn(buttonVariants({ size: "default" }))}
-          >
-            Get Started
-          </Link>
+      </section>
+
+      <section className="flex flex-col items-center justify-start py-20">
+        <h2 className="text-2xl font-bold">Jadwal Posyandu Bulan Ini</h2>
+
+        <div className="mt-5 w-fit">
+          <CalendarDemo />
         </div>
 
-        {/* <h1 className="text-4xl font-semibold">Contoh Penggunaan</h1> */}
+        <div className="mx-auto mt-5 flex w-fit min-w-[300px] flex-col items-start px-4">
+          <p className="font-bold">Keterangan</p>
 
-        {/* <div className="flex flex-col gap-2">
-          <div className="flex flex-col items-start justify-center gap-1">
-            <Label>NIK</Label>
-            <Input />
+          <div className="mt-2 flex items-center gap-2">
+            <div className="h-10 w-10 rounded-md bg-primary" />
+
+            <p className="text-[12px]">Kegiatan posyandu dilaksanakan</p>
           </div>
+        </div>
+      </section>
 
-          <div className="flex flex-col items-start justify-center gap-1">
-            <Label>Nama</Label>
-            <Input />
-          </div>
+      <section className="flex flex-col items-center justify-center py-20">
+        <h2 className="text-2xl font-bold">List Berita & Artikel</h2>
 
-          <div className="flex self-end gap-2">
-            <Button variant={"outline"}>Cancel</Button>
-            <Button>Submit</Button>
-          </div>
-        </div> */}
+        <div className="mt-5 flex w-fit flex-wrap gap-2">
+          {contents.map(({ title, img, desc }, index) => (
+            <CardBeritaArtikel
+              key={index}
+              img={img}
+              title={title}
+              desc={desc}
+            />
+          ))}
+        </div>
 
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
-          </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
-        </Card> */}
-      </div>
+        <Link href="/berita-artikel" className="mt-10 flex w-fit">
+          <Button type="submit" size={"sm"} className="w-full">
+            Lihat Semua Berita & Artikel
+          </Button>
+        </Link>
+      </section>
+
+      <Footer />
     </main>
   )
 }

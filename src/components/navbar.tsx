@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -8,7 +9,13 @@ export default function Navbar() {
       <div className="mx-auto w-full max-w-7xl px-4">
         <div className="flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center" prefetch={false}>
-            <MountainIcon className="h-6 w-6" />
+            <Image
+              src="/logo-posyandu.png"
+              width={1000}
+              height={1000}
+              alt="Posyandu Marga Agung"
+              className="h-12 w-16"
+            />
 
             <span className="sr-only">Posyandu Marga Agung</span>
           </Link>
@@ -21,6 +28,7 @@ export default function Navbar() {
             >
               Posyandu Marga Agung
             </Link>
+
             <Link
               href="berita-artikel"
               className="flex items-center text-sm font-medium transition-colors duration-300 ease-in-out hover:text-primary"
@@ -35,7 +43,7 @@ export default function Navbar() {
               href={"/login"}
               className={`${buttonVariants({ size: "sm" })} px-4`}
             >
-              Login
+              Login Kader
             </Link>
             {/* <Button size="sm" className="px-4" >
               Login
