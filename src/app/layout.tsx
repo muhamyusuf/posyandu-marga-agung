@@ -5,7 +5,7 @@ import { Inter } from "next/font/google"
 
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
-import { ThemeProvider } from "@/components/theme-provider"
+import Navbar from "@/components/navbar"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   creator: siteConfig.author,
   openGraph: {
     type: "website",
-    locale: "en_US",
+    locale: "id_ID",
     url: siteConfig.url.base,
     title: siteConfig.name,
     description: siteConfig.description,
@@ -49,18 +49,10 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
     images: [siteConfig.ogImage],
-    creator: "@_rdev7",
   },
   icons: {
     icon: "/favicon.ico",
   },
-}
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
@@ -73,14 +65,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           inter.className
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        {/* <Navbar /> */}
+
+        {children}
       </body>
     </html>
   )
