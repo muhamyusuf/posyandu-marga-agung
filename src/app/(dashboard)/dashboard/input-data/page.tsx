@@ -32,7 +32,6 @@ export default function InputDataPage() {
           value={selectedLayanan}
           onChange={handleLayananChange}
         >
-          <option value="">Pilih Layanan</option>
           <option value="keluarga">Layanan Keluarga</option>
           <option value="remaja_putri">Layanan Remaja Putri</option>
           <option value="ibu_hamil">Layanan Ibu Hamil</option>
