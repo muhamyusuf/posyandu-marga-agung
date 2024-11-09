@@ -2,6 +2,8 @@
 
 import React, { useState } from "react"
 
+import Footer from "@/components/footer"
+
 export default function BeritaArtikelPage() {
   const [isTambahArtikel, setIsTambahArtikel] = useState(false)
 
@@ -128,7 +130,7 @@ export default function BeritaArtikelPage() {
             </div>
           </div>
         )}
-        <div className="mt-6 text-center text-sm">Website Posyandu ©2024</div>
+        <Footer />
       </div>
     </main>
   )

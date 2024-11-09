@@ -1,3 +1,5 @@
+import Footer from "@/components/footer"
+
 export default function TambahBerita() {
   return (
     <main className="flex min-h-screen flex-col justify-start">
@@ -47,10 +49,7 @@ export default function TambahBerita() {
             Upload
           </button>
 
-          {/* Footer */}
-          <div className="mt-6 text-center text-sm text-gray-500">
-            Website Posyandu ©2024
-          </div>
+          <Footer />
         </div>
       </div>
     </main>

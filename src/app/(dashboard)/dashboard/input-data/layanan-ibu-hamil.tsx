@@ -1,10 +1,6 @@
 import React, { useState } from "react"
-import Image from "next/image"
-import Link from "next/link"
 
-import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
+import Footer from "@/components/footer"
 
 export default function InputDataBumil() {
   return (
@@ -250,10 +246,7 @@ export default function InputDataBumil() {
             SIMPAN
           </button>
 
-          {/* Footer */}
-          <div className="mt-6 text-center text-sm text-gray-500">
-            Website Posyandu ©2024
-          </div>
+          <Footer />
         </div>
       </div>
     </main>
