@@ -9,8 +9,15 @@ import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import Navbar from "@/components/navbar"
 
+import TabelDataAnak from "./tabel-data-anak"
+import TabelDataBumil from "./tabel-data-bumil"
+import TabelDataCatin from "./tabel-data-Catin"
+import TabelDataKeluarga from "./tabel-data-keluarga"
+import TabelDataLansia from "./tabel-data-lansia"
+import TabelDataRematri from "./tabel-data-Rematri"
+
 export default function TableDataPage() {
-  const [selectedLayanan, setSelectedLayanan] = useState("keluarga")
+  const [selectedLayanan, setSelectedLayanan] = useState("")
   const handleLayananChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedLayanan(event.target.value)
   }
@@ -35,7 +42,12 @@ export default function TableDataPage() {
       </div>
 
       {/* Kondisional Rendering */}
-      {/*selectedLayanan === "keluarga" && <InputDataKeluarga */}
+      {selectedLayanan === "keluarga" && <TabelDataAnak />}
+      {selectedLayanan === "keluarga" && <TabelDataBumil />}
+      {selectedLayanan === "keluarga" && <TabelDataRematri />}
+      {selectedLayanan === "keluarga" && <TabelDataKeluarga />}
+      {selectedLayanan === "keluarga" && <TabelDataLansia />}
+      {selectedLayanan === "keluarga" && <TabelDataCatin />}
     </main>
   )
 }

@@ -2,11 +2,11 @@ import React, { useState } from "react"
 
 import Footer from "@/components/footer"
 
-export default function TabelDataLansia() {
+export default function TabelDataRematri() {
   return (
     <main className="flex min-h-screen flex-col justify-start">
       <div className="min-h-screen bg-white p-6">
-        <h2 className="mb-4 text-xl font-bold">TABEL DATA LANSIA</h2>
+      <h2 className="mb-4 text-xl font-bold">TABEL DATA REMATRI</h2>
         {/* Bagian Pencarian dan Filter */}
         <div className="mb-4 flex justify-between">
           <div className="flex items-center gap-2">
