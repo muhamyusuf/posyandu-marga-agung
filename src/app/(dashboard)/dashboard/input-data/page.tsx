@@ -9,12 +9,12 @@ import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import Navbar from "@/components/navbar"
 
-import InputDataCanti from "./layanan-calon-pengantin"
-import InputDataBumil from "./layanan-ibu-hamil"
-import InputDataKeluarga from "./layanan-keluarga"
-import InputDataRematri from "./layanan-remaja-putri"
-import InputDataLansia from "./laynan-lansia"
-import InputDataAnak from "./laynanan-anak"
+import InputDataCanti from "./layanan-calon-pengantin/page"
+import InputDataBumil from "./layanan-ibu-hamil/page"
+import InputDataKeluarga from "./layanan-keluarga/page"
+import InputDataRematri from "./layanan-remaja-putri/page"
+import InputDataLansia from "./layanan-lansia/page"
+import InputDataAnak from "./layanan-anak/page"
 
 export default function InputDataPage() {
   const [selectedLayanan, setSelectedLayanan] = useState("keluarga")

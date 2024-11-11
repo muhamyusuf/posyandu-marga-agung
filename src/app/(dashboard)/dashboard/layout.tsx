@@ -1,5 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
+import AppSidebar from "@/components/app-sidebar"
 
 export default function DashboardLayout({
   children,
@@ -11,7 +11,6 @@ export default function DashboardLayout({
       <AppSidebar />
       <main>
         <SidebarTrigger />
-
         <div className="px-2 py-16 md:p-16">{children}</div>
       </main>
     </SidebarProvider>

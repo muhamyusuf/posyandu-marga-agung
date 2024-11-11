@@ -1,153 +1,265 @@
 "use client"
-
 import React, { useState } from "react"
-
 import Footer from "@/components/footer"
+import { saveKeluargaData } from "./actions"
 
 export default function InputDataKeluarga() {
+  const [namaKepalaKeluarga, setNamaKepalaKeluarga] = useState("")
+  const [dusun, setDusun] = useState("")
+  const [namaIbuHamil, setNamaIbuHamil] = useState("")
+  const [anak_0_59_bulan, setAnak_0_59_bulan] = useState(0)
+  const [kategoriKeluargaRentan, setKategoriKeluargaRentan] = useState(false)
+  const [kartuKeluarga, setKartuKeluarga] = useState(false)
+  const [jambanSehat, setJambanSehat] = useState(false)
+  const [sumberAirBersih, setSumberAirBersih] = useState(false)
+  const [jaminanSosial, setJaminanSosial] = useState(false)
+  const [jaminanKesehatan, setJaminanKesehatan] = useState(false)
+  const [aksesSanitasi, setAksesSanitasi] = useState(false)
+  const [pendampinganKeluarga, setPendampinganKeluarga] = useState(false)
+  const [ketahananPangan, setKetahananPangan] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    try {
+      await saveKeluargaData({
+        namaKepalaKeluarga,
+        dusun,
+        namaIbuHamil,
+        anak_0_59_bulan,
+        kategoriKeluargaRentan,
+        kartuKeluarga,
+        jambanSehat,
+        sumberAirBersih,
+        jaminanSosial,
+        jaminanKesehatan,
+        aksesSanitasi,
+        pendampinganKeluarga,
+        ketahananPangan,
+      })
+      alert("Data berhasil disimpan")
+
+      setNamaKepalaKeluarga("")
+      setDusun("")
+      setNamaIbuHamil("")
+      setAnak_0_59_bulan(0)
+      setKategoriKeluargaRentan(false)
+      setKartuKeluarga(false)
+      setJambanSehat(false)
+      setSumberAirBersih(false)
+      setJaminanSosial(false)
+      setJaminanKesehatan(false)
+      setAksesSanitasi(false)
+      setPendampinganKeluarga(false)
+      setKetahananPangan(false)
+    } catch (error) {
+      console.error("Terjadi kesalahan saat menyimpan data:", error)
+      alert("Gagal menyimpan data")
+    }
+  }
+
   return (
     <main className="flex min-h-screen flex-col justify-start">
       <div className="flex min-h-screen items-center justify-center bg-black text-white">
         <div className="w-full max-w-md rounded-md bg-white p-6 text-black">
-          {/* Header */}
           <div className="mb-6 text-center">
             <h1 className="text-xl font-semibold">DATA LAYANAN KELUARGA</h1>
           </div>
 
-          {/* Form */}
-          <form>
-            {/* Nama Lengkap Kepala Keluarga */}
+          <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Nama Lengkap Kepala Keluarga
               </label>
               <input
                 type="text"
+                value={namaKepalaKeluarga}
+                onChange={(e) => setNamaKepalaKeluarga(e.target.value)}
                 placeholder="Nama"
                 className="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
-            {/* Dusun */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">Dusun</label>
               <input
                 type="text"
+                value={dusun}
+                onChange={(e) => setDusun(e.target.value)}
                 placeholder="Contoh: 3"
                 className="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
-            {/* Nama Lengkap Ibu Hamil */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Nama Lengkap Ibu Hamil
               </label>
               <input
                 type="text"
+                value={namaIbuHamil}
+                onChange={(e) => setNamaIbuHamil(e.target.value)}
                 placeholder="Nama"
                 className="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
-            {/* Anak (0-59 bulan) */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Anak (0-59 bulan)
               </label>
               <input
-                type="text"
+                type="number"
+                value={anak_0_59_bulan}
+                onChange={(e) => setAnak_0_59_bulan(Number(e.target.value))}
                 placeholder="Contoh: 0"
                 className="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
 
-            {/* Kategori Keluarga Rentan */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Kategori Keluarga Rentan
               </label>
               <div className="flex items-center space-x-4">
                 <label className="flex items-center">
-                  <input type="radio" name="kategori_rentan" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="kategoriKeluargaRentan"
+                    checked={kategoriKeluargaRentan === true}
+                    onChange={() => setKategoriKeluargaRentan(true)}
+                    className="mr-2"
+                  />
                   <span>YA</span>
                 </label>
                 <label className="flex items-center">
-                  <input type="radio" name="kategori_rentan" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="kategoriKeluargaRentan"
+                    checked={kategoriKeluargaRentan === false}
+                    onChange={() => setKategoriKeluargaRentan(false)}
+                    className="mr-2"
+                  />
                   <span>TIDAK</span>
                 </label>
               </div>
             </div>
 
-            {/* Memiliki Kartu Keluarga */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Memiliki Kartu Keluarga
               </label>
               <div className="flex items-center space-x-4">
                 <label className="flex items-center">
-                  <input type="radio" name="kartu_keluarga" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="kartuKeluarga"
+                    checked={kartuKeluarga === true}
+                    onChange={() => setKartuKeluarga(true)}
+                    className="mr-2"
+                  />
                   <span>YA</span>
                 </label>
                 <label className="flex items-center">
-                  <input type="radio" name="kartu_keluarga" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="kartuKeluarga"
+                    checked={kartuKeluarga === false}
+                    onChange={() => setKartuKeluarga(false)}
+                    className="mr-2"
+                  />
                   <span>TIDAK</span>
                 </label>
               </div>
             </div>
 
-            {/* Memiliki Jamban Sehat */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Memiliki Jamban Sehat
               </label>
               <div className="flex items-center space-x-4">
                 <label className="flex items-center">
-                  <input type="radio" name="jamban_sehat" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="jambanSehat"
+                    checked={jambanSehat === true}
+                    onChange={() => setJambanSehat(true)}
+                    className="mr-2"
+                  />
                   <span>YA</span>
                 </label>
                 <label className="flex items-center">
-                  <input type="radio" name="jamban_sehat" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="jambanSehat"
+                    checked={jambanSehat === false}
+                    onChange={() => setJambanSehat(false)}
+                    className="mr-2"
+                  />
                   <span>TIDAK</span>
                 </label>
               </div>
             </div>
 
-            {/* Memiliki Sumber Air Bersih */}
+            {/* Sumber Air Bersih */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Memiliki Sumber Air Bersih
               </label>
               <div className="flex items-center space-x-4">
                 <label className="flex items-center">
-                  <input type="radio" name="air_bersih" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="sumberAirBersih"
+                    checked={sumberAirBersih === true}
+                    onChange={() => setSumberAirBersih(true)}
+                    className="mr-2"
+                  />
                   <span>YA</span>
                 </label>
                 <label className="flex items-center">
-                  <input type="radio" name="air_bersih" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="sumberAirBersih"
+                    checked={sumberAirBersih === false}
+                    onChange={() => setSumberAirBersih(false)}
+                    className="mr-2"
+                  />
                   <span>TIDAK</span>
                 </label>
               </div>
             </div>
 
-            {/* Peserta Jaminan Sosial */}
+            {/* Jaminan Sosial */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Peserta Jaminan Sosial (PKH/BLT-DD/Program sejenis)
               </label>
               <div className="flex items-center space-x-4">
                 <label className="flex items-center">
-                  <input type="radio" name="jaminan_sosial" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="jaminanSosial"
+                    checked={jaminanSosial === true}
+                    onChange={() => setJaminanSosial(true)}
+                    className="mr-2"
+                  />
                   <span>YA</span>
                 </label>
                 <label className="flex items-center">
-                  <input type="radio" name="jaminan_sosial" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="jaminanSosial"
+                    checked={jaminanSosial === false}
+                    onChange={() => setJaminanSosial(false)}
+                    className="mr-2"
+                  />
                   <span>TIDAK</span>
                 </label>
               </div>
             </div>
 
-            {/* Peserta Jaminan Kesehatan */}
+            {/* Jaminan Kesehatan */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
                 Peserta Jaminan Kesehatan
@@ -156,7 +268,9 @@ export default function InputDataKeluarga() {
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="jaminan_kesehatan"
+                    name="jaminanKesehatan"
+                    checked={jaminanKesehatan === true}
+                    onChange={() => setJaminanKesehatan(true)}
                     className="mr-2"
                   />
                   <span>YA</span>
@@ -164,7 +278,9 @@ export default function InputDataKeluarga() {
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="jaminan_kesehatan"
+                    name="jaminanKesehatan"
+                    checked={jaminanKesehatan === false}
+                    onChange={() => setJaminanKesehatan(false)}
                     className="mr-2"
                   />
                   <span>TIDAK</span>
@@ -172,18 +288,30 @@ export default function InputDataKeluarga() {
               </div>
             </div>
 
-            {/* Memiliki Akses Sanitasi/Pembuangan Limbah Layak */}
+            {/* Akses Sanitasi */}
             <div className="mb-4">
               <label className="mb-1 block text-sm font-semibold">
-                Memiliki Akses Sanitasi/ Pembuangan Limbah Layak
+                Memiliki Akses Sanitasi/Pembuangan Limbah Layak
               </label>
               <div className="flex items-center space-x-4">
                 <label className="flex items-center">
-                  <input type="radio" name="akses_sanitasi" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="aksesSanitasi"
+                    checked={aksesSanitasi === true}
+                    onChange={() => setAksesSanitasi(true)}
+                    className="mr-2"
+                  />
                   <span>YA</span>
                 </label>
                 <label className="flex items-center">
-                  <input type="radio" name="akses_sanitasi" className="mr-2" />
+                  <input
+                    type="radio"
+                    name="aksesSanitasi"
+                    checked={aksesSanitasi === false}
+                    onChange={() => setAksesSanitasi(false)}
+                    className="mr-2"
+                  />
                   <span>TIDAK</span>
                 </label>
               </div>
@@ -198,7 +326,9 @@ export default function InputDataKeluarga() {
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="pendampingan_tpk"
+                    name="pendampinganKeluarga"
+                    checked={pendampinganKeluarga === true}
+                    onChange={() => setPendampinganKeluarga(true)}
                     className="mr-2"
                   />
                   <span>YA</span>
@@ -206,7 +336,9 @@ export default function InputDataKeluarga() {
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="pendampingan_tpk"
+                    name="pendampinganKeluarga"
+                    checked={pendampinganKeluarga === false}
+                    onChange={() => setPendampinganKeluarga(false)}
                     className="mr-2"
                   />
                   <span>TIDAK</span>
@@ -223,7 +355,9 @@ export default function InputDataKeluarga() {
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="ketahanan_pangan"
+                    name="ketahananPangan"
+                    checked={ketahananPangan === true}
+                    onChange={() => setKetahananPangan(true)}
                     className="mr-2"
                   />
                   <span>YA</span>
@@ -231,14 +365,15 @@ export default function InputDataKeluarga() {
                 <label className="flex items-center">
                   <input
                     type="radio"
-                    name="ketahanan_pangan"
+                    name="ketahananPangan"
+                    checked={ketahananPangan === false}
+                    onChange={() => setKetahananPangan(false)}
                     className="mr-2"
                   />
                   <span>TIDAK</span>
                 </label>
               </div>
             </div>
-
             {/* Submit Button */}
             <div className="flex justify-center">
               <button

@@ -1,10 +1,9 @@
 import Image from "next/image"
-import Link from "next/link"
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { login } from "./actions"
 
 export default function LoginPage() {
   return (
@@ -39,23 +38,33 @@ export default function LoginPage() {
             </h1>
 
             <div className="mt-10 flex flex-col items-start justify-center gap-1">
-              <Label>Username</Label>
-
-              <Input className="h-8" />
+              <Label htmlFor="email">Email</Label>
+              <Input
+                className="h-8"
+                id="email"
+                name="email"
+                type="email"
+                required
+              />
             </div>
 
             <div className="flex flex-col items-start justify-center gap-1">
-              <Label>Password</Label>
-
-              <Input className="h-8" />
+              <Label htmlFor="password">Password</Label>
+              <Input
+                className="h-8"
+                id="password"
+                name="password"
+                type="password"
+                required
+              />
             </div>
 
             <div className="mt-5 flex w-full gap-2">
-              <Link href="/dashboard" className="flex w-full">
-                <Button type="submit" size={"sm"} className="w-full">
+              <div className="flex w-full">
+                <Button formAction={login} type="submit" size={"sm"} className="w-full">
                   Login
                 </Button>
-              </Link>
+              </div>
             </div>
           </form>
         </CardContent>

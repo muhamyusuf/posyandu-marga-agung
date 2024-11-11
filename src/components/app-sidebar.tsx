@@ -1,7 +1,6 @@
-import Image from "next/image"
-import Link from "next/link"
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
+import Image from "next/image";
+import Link from "next/link";
+import { Calendar, Home, Inbox, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +10,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import { signOut } from "@/app/(auth)/login/actions";
+import { createClient } from "@/utils/supabase/server";
 
 const items = [
   {
@@ -39,9 +40,14 @@ const items = [
     url: "/jadwal-posyandu",
     icon: Calendar,
   },
-]
+];
 
-export function AppSidebar() {
+export default async function AppSidebar() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   return (
     <Sidebar className="border-none">
       <SidebarContent>
@@ -54,7 +60,6 @@ export function AppSidebar() {
               alt="Posyandu Marga Agung"
               className="h-12 w-16"
             />
-
             <span className="sr-only">Posyandu Marga Agung</span>
           </Link>
 
@@ -72,10 +77,20 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <form action={signOut}>
+                  <button>
+                    <LogOut />
+                    <span>Keluar Akun</span>
+                  </button>
+                  </form>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
