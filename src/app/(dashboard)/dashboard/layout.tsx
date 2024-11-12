@@ -9,9 +9,13 @@ export default function DashboardLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
+
       <main>
         <SidebarTrigger />
-        <div className="px-2 py-16 md:p-16">{children}</div>
+
+        <div className="flex w-full flex-col px-2 py-16 md:p-16">
+          {children}
+        </div>
       </main>
     </SidebarProvider>
   )

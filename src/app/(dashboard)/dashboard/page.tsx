@@ -1,18 +1,19 @@
+import { redirect } from "next/navigation"
+import { createClient } from "@/utils/supabase/server"
+
 import { ChartDemo1 } from "@/components/charts/chart1"
 import { ChartDemo2 } from "@/components/charts/chart2"
 import { ChartDemo3 } from "@/components/charts/chart3"
 import { ChartDemo4 } from "@/components/charts/chart4"
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   if (!user) {
-    return redirect("/login");
+    return redirect("/login")
   }
 
   return (

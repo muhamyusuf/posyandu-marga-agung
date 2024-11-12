@@ -1,6 +1,15 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Calendar, Home, Inbox, LogOut } from "lucide-react";
+import Image from "next/image"
+import Link from "next/link"
+import { createClient } from "@/utils/supabase/server"
+import {
+  Calendar,
+  ClipboardType,
+  Home,
+  Inbox,
+  LogOut,
+  Newspaper,
+} from "lucide-react"
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,9 +19,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { signOut } from "@/app/(auth)/login/actions";
-import { createClient } from "@/utils/supabase/server";
+} from "@/components/ui/sidebar"
+import { signOut } from "@/app/(auth)/login/actions"
 
 const items = [
   {
@@ -28,25 +36,25 @@ const items = [
   {
     title: "Tabel Data Posyandu",
     url: "/tabel-data",
-    icon: Calendar,
+    icon: ClipboardType,
   },
   {
     title: "Tambah Artikel & Berita",
     url: "/berita-artikel",
-    icon: Calendar,
+    icon: Newspaper,
   },
   {
     title: "Atur Jadwal Posyandu",
     url: "/jadwal-posyandu",
     icon: Calendar,
   },
-];
+]
 
 export default async function AppSidebar() {
-  const supabase = await createClient();
+  const supabase = await createClient()
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.getUser()
 
   return (
     <Sidebar className="border-none">
@@ -65,7 +73,9 @@ export default async function AppSidebar() {
 
           <SidebarGroupLabel>Dashboard Posyandu Marga Agung</SidebarGroupLabel>
 
-          <SidebarGroupContent className="mt-10">
+          <p className="mt-10 px-2 text-sm">Hallo, {user?.email}</p>
+
+          <SidebarGroupContent className="mt-5">
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -77,13 +87,14 @@ export default async function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              <SidebarMenuItem>
+
+              <SidebarMenuItem className="mt-20">
                 <SidebarMenuButton asChild>
                   <form action={signOut}>
-                  <button>
-                    <LogOut />
-                    <span>Keluar Akun</span>
-                  </button>
+                    <button className="flex items-center gap-2">
+                      <LogOut />
+                      <span>Keluar Akun</span>
+                    </button>
                   </form>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -92,5 +103,5 @@ export default async function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  );
+  )
 }

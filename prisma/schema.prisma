@@ -3,103 +3,117 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
-model Lansia {
-  id               Int      @id @default(autoincrement())
-  nama             String
-  nik              String   @unique
-  tanggalLahir     DateTime
-  umur             Int
-  gds              Int
-  beratBadan       Float
-  tinggiBadan      Float
-  lingkarPinggang  Float
-  tekananDarah     String
-  createdAt        DateTime @default(now())
+model Warga {
+  id                    String                  @id @default(uuid())
+  nama                  String
+  nik                   String                  @unique
+  tanggalLahir          DateTime
+  umur                  Int
+  layananLansia         LayananLansia[]
+  layananCalonPengantin LayananCalonPengantin[]
+  layananRemajaPutri    LayananRemajaPutri[]
+  layananIbuHamil       LayananIbuHamil[]
+  layananAnak           LayananAnak[]
+  layananKeluarga       LayananKeluarga[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
 }
 
-model CalonPengantin {
-  id                 Int      @id @default(autoincrement())
-  nama               String
-  nik                String   @unique
-  tanggalLahir       DateTime
-  umur               Int
-  tanggalPernikahan  DateTime
-  periksaKesehatan   Boolean
+model LayananLansia {
+  id              String   @id @default(uuid())
+  wargaId         String
+  warga           Warga    @relation(fields: [wargaId], references: [id])
+  gds             Int
+  beratBadan      Float
+  tinggiBadan     Float
+  lingkarPinggang Float
+  tekananDarah    String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model LayananCalonPengantin {
+  id                  String   @id @default(uuid())
+  wargaId             String
+  warga               Warga    @relation(fields: [wargaId], references: [id])
+  tanggalPernikahan   DateTime
+  periksaKesehatan    Boolean
   bimbinganPerkawinan Boolean
-  createdAt          DateTime @default(now())
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 }
 
-model RemajaPutri {
-  id            Int      @id @default(autoincrement())
-  nama          String
-  nik           String   @unique
-  tanggalLahir  DateTime
-  umur          Int
-  ttd           Boolean
-  anemia        Boolean
-  hasilAnemia   Boolean
-  createdAt     DateTime @default(now())
+model LayananRemajaPutri {
+  id          String   @id @default(uuid())
+  wargaId     String
+  warga       Warga    @relation(fields: [wargaId], references: [id])
+  ttd         Boolean
+  anemia      Boolean
+  hasilAnemia Boolean
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
-model IbuHamil {
-  id                   Int      @id @default(autoincrement())
-  nama                 String
-  nik                  String   @unique
-  tanggalLahir         DateTime
-  umur                 Int
-  hariPertamaHaid      DateTime
+model LayananIbuHamil {
+  id                    String   @id @default(uuid())
+  wargaId               String
+  warga                 Warga    @relation(fields: [wargaId], references: [id])
+  hariPertamaHaid       DateTime
   tanggalPerkiraanLahir DateTime
-  umurKehamilan        Int
-  periksaKehamilan     String
-  statusGizi           Boolean
-  statusPeriksaLengkap Boolean
-  minumTtd             Boolean
-  kpPascaBersalin      Boolean
-  tambahanGizi         Boolean
-  createdAt            DateTime @default(now())
-}
-
-model dataAnak {
-  id                Int      @id @default(autoincrement())
-  nama              String
-  nik               String   @unique
-  tanggalLahir      DateTime
-  umur              Int
-  jenisKelamin      JenisKelamin
-  namaOrangTua      String
-  statusGiziKurang  Boolean
-  statusGiziBuruk   Boolean
-  stunting          Boolean
-  imunisasiHbO      Boolean
-  imunisasiBcgPolio1 Boolean
-  statusKelengkapan Boolean
-  createdAt         DateTime @default(now())
-}
-
-model Keluarga {
-  id                    Int      @id @default(autoincrement())
-  namaKepalaKeluarga    String
-  dusun                 String
-  namaIbuHamil          String
-  anak_0_59_bulan       Int
-  kategoriKeluargaRentan Boolean
-  kartuKeluarga         Boolean
-  jambanSehat           Boolean
-  sumberAirBersih       Boolean
-  jaminanSosial         Boolean
-  jaminanKesehatan      Boolean
-  aksesSanitasi         Boolean
-  pendampinganKeluarga  Boolean
-  ketahananPangan       Boolean
+  umurKehamilan         Int
+  periksaKehamilan      String
+  statusGizi            Boolean
+  statusPeriksaLengkap  Boolean
+  minumTtd              Boolean
+  kpPascaBersalin       Boolean
+  tambahanGizi          Boolean
   createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 }
 
-// Enum for gender in Anak model
+model LayananAnak {
+  id                 String       @id @default(uuid())
+  wargaId            String
+  warga              Warga        @relation(fields: [wargaId], references: [id])
+  jenisKelamin       JenisKelamin
+  namaOrangTua       String
+  statusGiziKurang   Boolean
+  statusGiziBuruk    Boolean
+  stunting           Boolean
+  imunisasiHbO       Boolean
+  imunisasiBcgPolio1 Boolean
+  statusKelengkapan  Boolean
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+}
+
+model LayananKeluarga {
+  id                     String   @id @default(uuid())
+  wargaId                String
+  warga                  Warga    @relation(fields: [wargaId], references: [id])
+  namaKepalaKeluarga     String
+  dusun                  String
+  namaIbuHamil           String
+  anak_0_59_bulan        Int
+  kategoriKeluargaRentan Boolean
+  kartuKeluarga          Boolean
+  jambanSehat            Boolean
+  sumberAirBersih        Boolean
+  jaminanSosial          Boolean
+  jaminanKesehatan       Boolean
+  aksesSanitasi          Boolean
+  pendampinganKeluarga   Boolean
+  ketahananPangan        Boolean
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+// Enum for gender in LayananAnak model
 enum JenisKelamin {
   LAKI_LAKI
   PEREMPUAN

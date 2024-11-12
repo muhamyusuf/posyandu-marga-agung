@@ -48,8 +48,6 @@ export default function TambahBerita() {
           >
             Upload
           </button>
-
-          <Footer />
         </div>
       </div>
     </main>

@@ -1,6 +1,9 @@
 "use client"
+
 import React, { useState } from "react"
+
 import Footer from "@/components/footer"
+
 import { saveCalonPengantinData } from "./actions"
 
 export default function InputDataCanti() {
@@ -34,7 +37,6 @@ export default function InputDataCanti() {
       setTanggalPernikahan("")
       setPeriksaKesehatan(false)
       setBimbinganPerkawinan(false)
-      
     } catch (error) {
       console.error("Terjadi kesalahan saat menyimpan data:", error)
       alert("Gagal menyimpan data")
@@ -170,7 +172,6 @@ export default function InputDataCanti() {
               SIMPAN
             </button>
           </form>
-          <Footer />
         </div>
       </div>
     </main>

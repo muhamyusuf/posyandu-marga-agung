@@ -1,9 +1,15 @@
 import Image from "next/image"
 import Link from "next/link"
+import { createClient } from "@/utils/supabase/server"
 
 import { Button, buttonVariants } from "@/components/ui/button"
 
-export default function Navbar() {
+export default async function Navbar() {
+  const supabase = await createClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+
   return (
     <nav className="fixed inset-x-0 top-0 z-50 bg-white shadow-sm dark:bg-gray-950/90">
       <div className="mx-auto w-full max-w-7xl px-4">
@@ -39,15 +45,21 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Link
-              href={"/login"}
-              className={`${buttonVariants({ size: "sm" })} px-4`}
-            >
-              Login Kader
-            </Link>
-            {/* <Button size="sm" className="px-4" >
-              Login
-            </Button> */}
+            {user ? (
+              <Link
+                href={"/dashboard"}
+                className={`${buttonVariants({ size: "sm" })} px-4`}
+              >
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href={"/login"}
+                className={`${buttonVariants({ size: "sm" })} px-4`}
+              >
+                Login Kader
+              </Link>
+            )}
           </div>
         </div>
       </div>

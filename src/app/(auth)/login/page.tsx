@@ -1,13 +1,15 @@
 import Image from "next/image"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+
 import { login } from "./actions"
 
 export default function LoginPage() {
   return (
-    <main className="flex h-screen flex-col items-center justify-center">
+    <main className="flex h-screen w-full flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-5 md:flex-row">
         <Image
           src="/logo-posyandu.png"
@@ -26,7 +28,7 @@ export default function LoginPage() {
         />
       </div>
 
-      <Card className="mt-5 min-w-[300px] border-none">
+      <Card className="mt-5 w-[320px] border-none">
         <CardContent className="border-none shadow-sm">
           <form className="mt-10 flex flex-col gap-2">
             <h1 className="text-lg font-semibold">
@@ -61,7 +63,12 @@ export default function LoginPage() {
 
             <div className="mt-5 flex w-full gap-2">
               <div className="flex w-full">
-                <Button formAction={login} type="submit" size={"sm"} className="w-full">
+                <Button
+                  formAction={login}
+                  type="submit"
+                  size={"sm"}
+                  className="w-full"
+                >
                   Login
                 </Button>
               </div>
