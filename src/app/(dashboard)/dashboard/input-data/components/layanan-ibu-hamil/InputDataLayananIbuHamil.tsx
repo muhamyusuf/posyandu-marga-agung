@@ -47,9 +47,20 @@ const layananIbuHamilSchema = z.object({
 type LayananIbuHamilFormValues = z.infer<typeof layananIbuHamilSchema>
 
 export default function InputDataLayananIbuHamil() {
-  const router = useRouter()
   const form = useForm<LayananIbuHamilFormValues>({
     resolver: zodResolver(layananIbuHamilSchema),
+    defaultValues: {
+      wargaId: "",
+      hariPertamaHaid: "",
+      tanggalPerkiraanLahir: "",
+      umurKehamilan: undefined,
+      periksaKehamilan: "",
+      statusGizi: false,
+      statusPeriksaLengkap: false,
+      minumTtd: false,
+      kpPascaBersalin: false,
+      tambahanGizi: false,
+    },
   })
 
   const onSubmit = async (data: LayananIbuHamilFormValues) => {
@@ -61,7 +72,6 @@ export default function InputDataLayananIbuHamil() {
         description: "Data layanan ibu hamil berhasil disimpan",
       })
       form.reset() // Clear the form
-      router.push("/success") // Redirect or show success message if needed
     } else {
       toast({
         title: "Gagal menyimpan data",
@@ -81,13 +91,17 @@ export default function InputDataLayananIbuHamil() {
         <FormField
           control={form.control}
           name="wargaId"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="wargaId">Warga ID</Label>
               <FormControl>
-                <Input id="wargaId" {...field} />
+                <Input
+                  id="wargaId"
+                  placeholder="Masukkan Warga ID"
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -96,13 +110,13 @@ export default function InputDataLayananIbuHamil() {
         <FormField
           control={form.control}
           name="hariPertamaHaid"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="hariPertamaHaid">Hari Pertama Haid</Label>
               <FormControl>
                 <Input id="hariPertamaHaid" type="date" {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -111,7 +125,7 @@ export default function InputDataLayananIbuHamil() {
         <FormField
           control={form.control}
           name="tanggalPerkiraanLahir"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="tanggalPerkiraanLahir">
                 Tanggal Perkiraan Lahir
@@ -119,7 +133,7 @@ export default function InputDataLayananIbuHamil() {
               <FormControl>
                 <Input id="tanggalPerkiraanLahir" type="date" {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -128,13 +142,13 @@ export default function InputDataLayananIbuHamil() {
         <FormField
           control={form.control}
           name="umurKehamilan"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="umurKehamilan">Umur Kehamilan</Label>
               <FormControl>
                 <Input id="umurKehamilan" type="number" {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -143,49 +157,61 @@ export default function InputDataLayananIbuHamil() {
         <FormField
           control={form.control}
           name="periksaKehamilan"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="periksaKehamilan">Periksa Kehamilan</Label>
               <FormControl>
-                <Input id="periksaKehamilan" {...field} />
+                <Input
+                  id="periksaKehamilan"
+                  placeholder="Masukkan Periksa Kehamilan"
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
 
-        {/* Boolean Fields with ShadCN Checkbox */}
-        {[
-          { name: "statusGizi", label: "Status Gizi" },
-          { name: "statusPeriksaLengkap", label: "Status Periksa Lengkap" },
-          { name: "minumTtd", label: "Minum TTD" },
-          { name: "kpPascaBersalin", label: "KP Pasca Bersalin" },
-          { name: "tambahanGizi", label: "Tambahan Gizi" },
-        ].map(({ name, label }) => (
-          <FormField
-            key={name}
-            control={form.control}
-            name={name as keyof LayananIbuHamilFormValues}
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex items-center gap-2">
-                  <FormControl>
-                    <Checkbox
-                      id={name}
-                      checked={field.value as boolean}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                  <Label htmlFor={name}>{label}</Label>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
+        {/* Boolean Fields with Checkboxes */}
+        <div className="mt-5 space-y-2">
+          {[
+            { name: "statusGizi", label: "Status Gizi" },
+            { name: "statusPeriksaLengkap", label: "Status Periksa Lengkap" },
+            { name: "minumTtd", label: "Minum TTD" },
+            { name: "kpPascaBersalin", label: "KP Pasca Bersalin" },
+            { name: "tambahanGizi", label: "Tambahan Gizi" },
+          ].map(({ name, label }) => (
+            <FormField
+              key={name}
+              control={form.control}
+              name={name as keyof LayananIbuHamilFormValues}
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <div className="flex items-center gap-2">
+                    <FormControl>
+                      <Checkbox
+                        id={name}
+                        checked={field.value as boolean}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <Label htmlFor={name}>{label}</Label>
+                  </div>
+                  <FormMessage>{fieldState.error?.message}</FormMessage>
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
 
         {/* Submit Button */}
-        <Button type="submit">Simpan Data</Button>
+        <Button
+          type="submit"
+          className="mt-5"
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
+        </Button>
       </form>
     </Form>
   )

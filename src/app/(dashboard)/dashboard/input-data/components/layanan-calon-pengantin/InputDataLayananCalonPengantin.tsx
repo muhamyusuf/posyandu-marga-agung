@@ -38,6 +38,12 @@ export default function InputDataLayananCalonPengantin() {
   const router = useRouter()
   const form = useForm<LayananCalonPengantinFormValues>({
     resolver: zodResolver(layananCalonPengantinSchema),
+    defaultValues: {
+      wargaId: "",
+      tanggalPernikahan: "",
+      periksaKesehatan: false,
+      bimbinganPerkawinan: false,
+    },
   })
 
   const onSubmit = async (data: LayananCalonPengantinFormValues) => {
@@ -63,19 +69,23 @@ export default function InputDataLayananCalonPengantin() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-10 flex flex-col rounded-md"
+        className="mt-10 flex flex-col space-y-2 rounded-md"
       >
         {/* Warga ID Field */}
         <FormField
           control={form.control}
           name="wargaId"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="wargaId">Warga ID</Label>
               <FormControl>
-                <Input id="wargaId" {...field} />
+                <Input
+                  id="wargaId"
+                  placeholder="Masukkan Warga ID"
+                  {...field}
+                />
               </FormControl>
-              <FormMessage />
+              <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -84,63 +94,54 @@ export default function InputDataLayananCalonPengantin() {
         <FormField
           control={form.control}
           name="tanggalPernikahan"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem>
               <Label htmlFor="tanggalPernikahan">Tanggal Pernikahan</Label>
               <FormControl>
                 <Input id="tanggalPernikahan" type="date" {...field} />
               </FormControl>
-              <FormMessage />
+              <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
 
-        {/* Periksa Kesehatan Field */}
-        <FormField
-          control={form.control}
-          name="periksaKesehatan"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center gap-2">
-                <FormControl>
-                  <Checkbox
-                    id="periksaKesehatan"
-                    checked={field.value as boolean}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <Label htmlFor="periksaKesehatan">Periksa Kesehatan</Label>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {/* Bimbingan Perkawinan Field */}
-        <FormField
-          control={form.control}
-          name="bimbinganPerkawinan"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center gap-2">
-                <FormControl>
-                  <Checkbox
-                    id="bimbinganPerkawinan"
-                    checked={field.value as boolean}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <Label htmlFor="bimbinganPerkawinan">
-                  Bimbingan Perkawinan
-                </Label>
-              </div>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* Checkbox Fields */}
+        <div className="mt-5 space-y-2">
+          {[
+            { name: "periksaKesehatan", label: "Periksa Kesehatan" },
+            { name: "bimbinganPerkawinan", label: "Bimbingan Perkawinan" },
+          ].map(({ name, label }) => (
+            <FormField
+              key={name}
+              control={form.control}
+              name={name as keyof LayananCalonPengantinFormValues}
+              render={({ field, fieldState }) => (
+                <FormItem>
+                  <div className="flex items-center gap-2">
+                    <FormControl>
+                      <Checkbox
+                        id={name}
+                        checked={field.value as boolean}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <Label htmlFor={name}>{label}</Label>
+                  </div>
+                  <FormMessage>{fieldState.error?.message}</FormMessage>
+                </FormItem>
+              )}
+            />
+          ))}
+        </div>
 
         {/* Submit Button */}
-        <Button type="submit">Simpan Data</Button>
+        <Button
+          type="submit"
+          className="mt-5"
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
+        </Button>
       </form>
     </Form>
   )

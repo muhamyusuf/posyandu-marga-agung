@@ -41,6 +41,14 @@ export default function InputDataLayananLansia() {
   const router = useRouter()
   const form = useForm<LayananLansiaFormValues>({
     resolver: zodResolver(layananLansiaSchema),
+    defaultValues: {
+      wargaId: "",
+      gds: undefined,
+      beratBadan: undefined,
+      tinggiBadan: undefined,
+      lingkarPinggang: undefined,
+      tekananDarah: "",
+    },
   })
 
   const onSubmit = async (data: LayananLansiaFormValues) => {
@@ -76,7 +84,11 @@ export default function InputDataLayananLansia() {
             <FormItem>
               <Label htmlFor="wargaId">Warga ID</Label>
               <FormControl>
-                <Input id="wargaId" {...field} />
+                <Input
+                  id="wargaId"
+                  placeholder="Masukkan Warga ID"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -91,7 +103,12 @@ export default function InputDataLayananLansia() {
             <FormItem>
               <Label htmlFor="gds">GDS</Label>
               <FormControl>
-                <Input id="gds" type="number" {...field} />
+                <Input
+                  id="gds"
+                  type="number"
+                  placeholder="Masukkan GDS"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -106,7 +123,12 @@ export default function InputDataLayananLansia() {
             <FormItem>
               <Label htmlFor="beratBadan">Berat Badan</Label>
               <FormControl>
-                <Input id="beratBadan" type="number" {...field} />
+                <Input
+                  id="beratBadan"
+                  type="number"
+                  placeholder="Masukkan Berat Badan"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -121,7 +143,12 @@ export default function InputDataLayananLansia() {
             <FormItem>
               <Label htmlFor="tinggiBadan">Tinggi Badan</Label>
               <FormControl>
-                <Input id="tinggiBadan" type="number" {...field} />
+                <Input
+                  id="tinggiBadan"
+                  type="number"
+                  placeholder="Masukkan Tinggi Badan"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -136,7 +163,12 @@ export default function InputDataLayananLansia() {
             <FormItem>
               <Label htmlFor="lingkarPinggang">Lingkar Pinggang</Label>
               <FormControl>
-                <Input id="lingkarPinggang" type="number" {...field} />
+                <Input
+                  id="lingkarPinggang"
+                  type="number"
+                  placeholder="Masukkan Lingkar Pinggang"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -151,7 +183,11 @@ export default function InputDataLayananLansia() {
             <FormItem>
               <Label htmlFor="tekananDarah">Tekanan Darah</Label>
               <FormControl>
-                <Input id="tekananDarah" {...field} />
+                <Input
+                  id="tekananDarah"
+                  placeholder="Masukkan Tekanan Darah"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -159,7 +195,13 @@ export default function InputDataLayananLansia() {
         />
 
         {/* Submit Button */}
-        <Button type="submit">Simpan Data</Button>
+        <Button
+          type="submit"
+          className="mt-5"
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
+        </Button>
       </form>
     </Form>
   )

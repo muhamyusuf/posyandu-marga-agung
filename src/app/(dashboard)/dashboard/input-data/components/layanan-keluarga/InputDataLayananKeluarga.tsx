@@ -21,41 +21,27 @@ import { Label } from "@/components/ui/label"
 import { saveDataLayananKeluarga } from "./action"
 
 // Define the validation schema with Zod
-const layananKeluargaSchema = z
-  .object({
-    wargaId: z.string().min(1, { message: "Warga ID wajib diisi" }),
-    namaKepalaKeluarga: z
-      .string()
-      .min(1, { message: "Nama Kepala Keluarga wajib diisi" }),
-    dusun: z.string().min(1, { message: "Dusun wajib diisi" }),
-    namaIbuHamil: z.string().min(1, { message: "Nama Ibu Hamil wajib diisi" }),
-    anak_0_59_bulan: z
-      .number()
-      .min(0, { message: "Anak 0-59 bulan wajib diisi" }),
-    kategoriKeluargaRentan: z.boolean(),
-    kartuKeluarga: z.boolean(),
-    jambanSehat: z.boolean(),
-    sumberAirBersih: z.boolean(),
-    jaminanSosial: z.boolean(),
-    jaminanKesehatan: z.boolean(),
-    aksesSanitasi: z.boolean(),
-    pendampinganKeluarga: z.boolean(),
-    ketahananPangan: z.boolean(),
-  })
-  .superRefine((data, ctx) => {
-    Object.keys(data).forEach((key) => {
-      if (
-        data[key as keyof typeof data] === undefined ||
-        data[key as keyof typeof data] === ""
-      ) {
-        ctx.addIssue({
-          code: "custom", // Tambahkan kode error 'custom'
-          path: [key],
-          message: "Data wajib diisi terlebih dahulu", // Pesan default
-        })
-      }
-    })
-  })
+const layananKeluargaSchema = z.object({
+  wargaId: z.string().min(1, { message: "Warga ID wajib diisi" }),
+  namaKepalaKeluarga: z
+    .string()
+    .min(1, { message: "Nama Kepala Keluarga wajib diisi" }),
+  dusun: z.string().min(1, { message: "Dusun wajib diisi" }),
+  namaIbuHamil: z.string().min(1, { message: "Nama Ibu Hamil wajib diisi" }),
+  anak_0_59_bulan: z.preprocess(
+    (value) => parseInt(value as string, 10),
+    z.number().min(0, { message: "Anak 0-59 bulan wajib diisi" })
+  ),
+  kategoriKeluargaRentan: z.boolean(),
+  kartuKeluarga: z.boolean(),
+  jambanSehat: z.boolean(),
+  sumberAirBersih: z.boolean(),
+  jaminanSosial: z.boolean(),
+  jaminanKesehatan: z.boolean(),
+  aksesSanitasi: z.boolean(),
+  pendampinganKeluarga: z.boolean(),
+  ketahananPangan: z.boolean(),
+})
 
 type LayananKeluargaFormValues = z.infer<typeof layananKeluargaSchema>
 
@@ -63,8 +49,6 @@ export default function InputDataLayananKeluarga() {
   const router = useRouter()
   const form = useForm<LayananKeluargaFormValues>({
     resolver: zodResolver(layananKeluargaSchema),
-    shouldFocusError: true,
-    mode: "onTouched",
   })
 
   const onSubmit = async (data: LayananKeluargaFormValues) => {
@@ -76,7 +60,7 @@ export default function InputDataLayananKeluarga() {
         description: "Data layanan keluarga berhasil disimpan",
       })
       form.reset() // Clear the form
-      router.push("/success") // Redirect or show success message if needed
+      router.push("/success")
     } else {
       toast({
         title: "Gagal menyimpan data",
@@ -86,16 +70,19 @@ export default function InputDataLayananKeluarga() {
     }
   }
 
-  const booleanFields: (keyof LayananKeluargaFormValues)[] = [
-    "kategoriKeluargaRentan",
-    "kartuKeluarga",
-    "jambanSehat",
-    "sumberAirBersih",
-    "jaminanSosial",
-    "jaminanKesehatan",
-    "aksesSanitasi",
-    "pendampinganKeluarga",
-    "ketahananPangan",
+  const booleanFields: {
+    name: keyof LayananKeluargaFormValues
+    label: string
+  }[] = [
+    { name: "kategoriKeluargaRentan", label: "Kategori Keluarga Rentan" },
+    { name: "kartuKeluarga", label: "Kartu Keluarga" },
+    { name: "jambanSehat", label: "Jamban Sehat" },
+    { name: "sumberAirBersih", label: "Sumber Air Bersih" },
+    { name: "jaminanSosial", label: "Jaminan Sosial" },
+    { name: "jaminanKesehatan", label: "Jaminan Kesehatan" },
+    { name: "aksesSanitasi", label: "Akses Sanitasi" },
+    { name: "pendampinganKeluarga", label: "Pendampingan Keluarga" },
+    { name: "ketahananPangan", label: "Ketahanan Pangan" },
   ]
 
   return (
@@ -112,7 +99,11 @@ export default function InputDataLayananKeluarga() {
             <FormItem>
               <Label htmlFor="wargaId">Warga ID</Label>
               <FormControl>
-                <Input id="wargaId" {...field} />
+                <Input
+                  id="wargaId"
+                  placeholder="Masukkan Warga ID"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -127,7 +118,11 @@ export default function InputDataLayananKeluarga() {
             <FormItem>
               <Label htmlFor="namaKepalaKeluarga">Nama Kepala Keluarga</Label>
               <FormControl>
-                <Input id="namaKepalaKeluarga" {...field} />
+                <Input
+                  id="namaKepalaKeluarga"
+                  placeholder="Masukkan Nama Kepala Keluarga"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -142,7 +137,7 @@ export default function InputDataLayananKeluarga() {
             <FormItem>
               <Label htmlFor="dusun">Dusun</Label>
               <FormControl>
-                <Input id="dusun" {...field} />
+                <Input id="dusun" placeholder="Masukkan Dusun" {...field} />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -157,7 +152,11 @@ export default function InputDataLayananKeluarga() {
             <FormItem>
               <Label htmlFor="namaIbuHamil">Nama Ibu Hamil</Label>
               <FormControl>
-                <Input id="namaIbuHamil" {...field} />
+                <Input
+                  id="namaIbuHamil"
+                  placeholder="Masukkan Nama Ibu Hamil"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
@@ -172,16 +171,23 @@ export default function InputDataLayananKeluarga() {
             <FormItem>
               <Label htmlFor="anak_0_59_bulan">Anak 0-59 Bulan</Label>
               <FormControl>
-                <Input id="anak_0_59_bulan" type="number" {...field} />
+                <Input
+                  id="anak_0_59_bulan"
+                  type="number"
+                  min="0"
+                  max="59"
+                  placeholder="Jumlah Anak 0-59 Bulan"
+                  {...field}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
           )}
         />
 
-        <div className="mt-2 space-y-2">
-          {/* Boolean Fields with ShadCN Checkbox */}
-          {booleanFields.map((name) => (
+        {/* Boolean Fields with Checkboxes */}
+        <div className="mt-5 space-y-2">
+          {booleanFields.map(({ name, label }) => (
             <FormField
               key={name}
               control={form.control}
@@ -196,7 +202,7 @@ export default function InputDataLayananKeluarga() {
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <Label htmlFor={name}>{name}</Label>
+                    <Label htmlFor={name}>{label}</Label>
                   </div>
                   <FormMessage>{fieldState.error?.message}</FormMessage>
                 </FormItem>
@@ -206,8 +212,12 @@ export default function InputDataLayananKeluarga() {
         </div>
 
         {/* Submit Button */}
-        <Button type="submit" className="mt-5">
-          Simpan Data
+        <Button
+          type="submit"
+          className="mt-5"
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
         </Button>
       </form>
     </Form>
