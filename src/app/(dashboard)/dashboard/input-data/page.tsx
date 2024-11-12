@@ -9,12 +9,18 @@ import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"
 import Navbar from "@/components/navbar"
 
+import InputDataLayananAnak from "./components/layanan-anak/InputDataLayananAnak"
+import InputDataLayananCalonPengantin from "./components/layanan-calon-pengantin/InputDataLayananCalonPengantin"
+import InputDataLayananIbuHamil from "./components/layanan-ibu-hamil/InputDataLayananIbuHamil"
+import InputDataLayananKeluarga from "./components/layanan-keluarga/InputDataLayananKeluarga"
+import InputDataLayananLansia from "./components/layanan-lansia/InputDataLayananLansia"
+import InputDataLayananRemajaPutri from "./components/layanan-remaja-putri/InputDataLayananRemajaPutri"
+import InputDataAnak from "./layanan-anak/page"
 import InputDataCanti from "./layanan-calon-pengantin/page"
 import InputDataBumil from "./layanan-ibu-hamil/page"
 import InputDataKeluarga from "./layanan-keluarga/page"
-import InputDataRematri from "./layanan-remaja-putri/page"
 import InputDataLansia from "./layanan-lansia/page"
-import InputDataAnak from "./layanan-anak/page"
+import InputDataRematri from "./layanan-remaja-putri/page"
 
 export default function InputDataPage() {
   const [selectedLayanan, setSelectedLayanan] = useState("keluarga")
@@ -42,12 +48,14 @@ export default function InputDataPage() {
       </div>
 
       {/* Kondisional Rendering */}
-      {selectedLayanan === "keluarga" && <InputDataKeluarga />}
-      {selectedLayanan === "remaja_putri" && <InputDataRematri />}
-      {selectedLayanan === "calon_pengantin" && <InputDataCanti />}
-      {selectedLayanan === "ibu_hamil" && <InputDataBumil />}
-      {selectedLayanan === "anak" && <InputDataAnak />}
-      {selectedLayanan === "lansia" && <InputDataLansia />}
+      {selectedLayanan === "keluarga" && <InputDataLayananKeluarga />}
+      {selectedLayanan === "remaja_putri" && <InputDataLayananRemajaPutri />}
+      {selectedLayanan === "calon_pengantin" && (
+        <InputDataLayananCalonPengantin />
+      )}
+      {selectedLayanan === "ibu_hamil" && <InputDataLayananIbuHamil />}
+      {selectedLayanan === "anak" && <InputDataLayananAnak />}
+      {selectedLayanan === "lansia" && <InputDataLayananLansia />}
     </main>
   )
 }

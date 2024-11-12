@@ -29,6 +29,11 @@ const items = [
     icon: Home,
   },
   {
+    title: "Tambah Data Warga",
+    url: "/input-data/data-warga",
+    icon: Inbox,
+  },
+  {
     title: "Input Data Posyandu",
     url: "/input-data",
     icon: Inbox,
