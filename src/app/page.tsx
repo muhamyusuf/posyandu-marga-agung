@@ -1,6 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { contents } from "@/constants/artikeldata"
+
 import { siteConfig } from "@/config/site"
 import { cn } from "@/lib/utils"
 import { Button, buttonVariants } from "@/components/ui/button"

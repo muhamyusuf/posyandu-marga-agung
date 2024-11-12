@@ -7,6 +7,14 @@ import { z } from "zod"
 
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -28,12 +36,7 @@ type LayananCalonPengantinFormValues = z.infer<
 
 export default function InputDataLayananCalonPengantin() {
   const router = useRouter()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<LayananCalonPengantinFormValues>({
+  const form = useForm<LayananCalonPengantinFormValues>({
     resolver: zodResolver(layananCalonPengantinSchema),
   })
 
@@ -45,7 +48,7 @@ export default function InputDataLayananCalonPengantin() {
         title: "Data berhasil disimpan",
         description: "Data layanan calon pengantin berhasil disimpan",
       })
-      reset() // Clear the form
+      form.reset() // Clear the form
       router.push("/success") // Redirect or show success message if needed
     } else {
       toast({
@@ -57,59 +60,88 @@ export default function InputDataLayananCalonPengantin() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col justify-start p-6">
-      <h1 className="mb-6 text-2xl font-bold">
-        Tambah Data Layanan Calon Pengantin
-      </h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-10 flex flex-col rounded-md"
+      >
         {/* Warga ID Field */}
-        <div>
-          <Label htmlFor="wargaId">Warga ID</Label>
-          <Input id="wargaId" {...register("wargaId")} />
-          {errors.wargaId && (
-            <p className="text-sm text-red-500">{errors.wargaId.message}</p>
+        <FormField
+          control={form.control}
+          name="wargaId"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="wargaId">Warga ID</Label>
+              <FormControl>
+                <Input id="wargaId" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Tanggal Pernikahan Field */}
-        <div>
-          <Label htmlFor="tanggalPernikahan">Tanggal Pernikahan</Label>
-          <Input
-            id="tanggalPernikahan"
-            type="date"
-            {...register("tanggalPernikahan")}
-          />
-          {errors.tanggalPernikahan && (
-            <p className="text-sm text-red-500">
-              {errors.tanggalPernikahan.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="tanggalPernikahan"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="tanggalPernikahan">Tanggal Pernikahan</Label>
+              <FormControl>
+                <Input id="tanggalPernikahan" type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Periksa Kesehatan Field */}
-        <div className="flex items-center gap-2">
-          <Label htmlFor="periksaKesehatan">Periksa Kesehatan</Label>
-          <input
-            id="periksaKesehatan"
-            type="checkbox"
-            {...register("periksaKesehatan")}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="periksaKesehatan"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center gap-2">
+                <FormControl>
+                  <Checkbox
+                    id="periksaKesehatan"
+                    checked={field.value as boolean}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <Label htmlFor="periksaKesehatan">Periksa Kesehatan</Label>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Bimbingan Perkawinan Field */}
-        <div className="flex items-center gap-2">
-          <Label htmlFor="bimbinganPerkawinan">Bimbingan Perkawinan</Label>
-          <input
-            id="bimbinganPerkawinan"
-            type="checkbox"
-            {...register("bimbinganPerkawinan")}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="bimbinganPerkawinan"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center gap-2">
+                <FormControl>
+                  <Checkbox
+                    id="bimbinganPerkawinan"
+                    checked={field.value as boolean}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <Label htmlFor="bimbinganPerkawinan">
+                  Bimbingan Perkawinan
+                </Label>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* Submit Button */}
         <Button type="submit">Simpan Data</Button>
       </form>
-    </main>
+    </Form>
   )
 }

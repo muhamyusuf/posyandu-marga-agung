@@ -7,6 +7,13 @@ import { z } from "zod"
 
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -32,12 +39,7 @@ type LayananLansiaFormValues = z.infer<typeof layananLansiaSchema>
 
 export default function InputDataLayananLansia() {
   const router = useRouter()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<LayananLansiaFormValues>({
+  const form = useForm<LayananLansiaFormValues>({
     resolver: zodResolver(layananLansiaSchema),
   })
 
@@ -49,7 +51,7 @@ export default function InputDataLayananLansia() {
         title: "Data berhasil disimpan",
         description: "Data layanan lansia berhasil disimpan",
       })
-      reset() // Clear the form
+      form.reset() // Clear the form
       router.push("/success") // Redirect or show success message if needed
     } else {
       toast({
@@ -61,87 +63,104 @@ export default function InputDataLayananLansia() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col justify-start p-6">
-      <h1 className="mb-6 text-2xl font-bold">Tambah Data Layanan Lansia</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-10 flex flex-col rounded-md"
+      >
         {/* Warga ID Field */}
-        <div>
-          <Label htmlFor="wargaId">Warga ID</Label>
-          <Input id="wargaId" {...register("wargaId")} />
-          {errors.wargaId && (
-            <p className="text-sm text-red-500">{errors.wargaId.message}</p>
+        <FormField
+          control={form.control}
+          name="wargaId"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <Label htmlFor="wargaId">Warga ID</Label>
+              <FormControl>
+                <Input id="wargaId" {...field} />
+              </FormControl>
+              <FormMessage>{fieldState.error?.message}</FormMessage>
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* GDS Field */}
-        <div>
-          <Label htmlFor="gds">GDS</Label>
-          <Input
-            id="gds"
-            type="number"
-            {...register("gds", { valueAsNumber: true })}
-          />
-          {errors.gds && (
-            <p className="text-sm text-red-500">{errors.gds.message}</p>
+        <FormField
+          control={form.control}
+          name="gds"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <Label htmlFor="gds">GDS</Label>
+              <FormControl>
+                <Input id="gds" type="number" {...field} />
+              </FormControl>
+              <FormMessage>{fieldState.error?.message}</FormMessage>
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Berat Badan Field */}
-        <div>
-          <Label htmlFor="beratBadan">Berat Badan</Label>
-          <Input
-            id="beratBadan"
-            type="number"
-            {...register("beratBadan", { valueAsNumber: true })}
-          />
-          {errors.beratBadan && (
-            <p className="text-sm text-red-500">{errors.beratBadan.message}</p>
+        <FormField
+          control={form.control}
+          name="beratBadan"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <Label htmlFor="beratBadan">Berat Badan</Label>
+              <FormControl>
+                <Input id="beratBadan" type="number" {...field} />
+              </FormControl>
+              <FormMessage>{fieldState.error?.message}</FormMessage>
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Tinggi Badan Field */}
-        <div>
-          <Label htmlFor="tinggiBadan">Tinggi Badan</Label>
-          <Input
-            id="tinggiBadan"
-            type="number"
-            {...register("tinggiBadan", { valueAsNumber: true })}
-          />
-          {errors.tinggiBadan && (
-            <p className="text-sm text-red-500">{errors.tinggiBadan.message}</p>
+        <FormField
+          control={form.control}
+          name="tinggiBadan"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <Label htmlFor="tinggiBadan">Tinggi Badan</Label>
+              <FormControl>
+                <Input id="tinggiBadan" type="number" {...field} />
+              </FormControl>
+              <FormMessage>{fieldState.error?.message}</FormMessage>
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Lingkar Pinggang Field */}
-        <div>
-          <Label htmlFor="lingkarPinggang">Lingkar Pinggang</Label>
-          <Input
-            id="lingkarPinggang"
-            type="number"
-            {...register("lingkarPinggang", { valueAsNumber: true })}
-          />
-          {errors.lingkarPinggang && (
-            <p className="text-sm text-red-500">
-              {errors.lingkarPinggang.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="lingkarPinggang"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <Label htmlFor="lingkarPinggang">Lingkar Pinggang</Label>
+              <FormControl>
+                <Input id="lingkarPinggang" type="number" {...field} />
+              </FormControl>
+              <FormMessage>{fieldState.error?.message}</FormMessage>
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Tekanan Darah Field */}
-        <div>
-          <Label htmlFor="tekananDarah">Tekanan Darah</Label>
-          <Input id="tekananDarah" {...register("tekananDarah")} />
-          {errors.tekananDarah && (
-            <p className="text-sm text-red-500">
-              {errors.tekananDarah.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="tekananDarah"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <Label htmlFor="tekananDarah">Tekanan Darah</Label>
+              <FormControl>
+                <Input id="tekananDarah" {...field} />
+              </FormControl>
+              <FormMessage>{fieldState.error?.message}</FormMessage>
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Submit Button */}
         <Button type="submit">Simpan Data</Button>
       </form>
-    </main>
+    </Form>
   )
 }

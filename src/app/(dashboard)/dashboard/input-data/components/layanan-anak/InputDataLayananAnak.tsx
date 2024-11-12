@@ -7,8 +7,23 @@ import { z } from "zod"
 
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import { saveDataLayananAnak } from "./action"
 
@@ -31,12 +46,7 @@ type LayananAnakFormValues = z.infer<typeof layananAnakSchema>
 
 export default function InputDataLayananAnak() {
   const router = useRouter()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<LayananAnakFormValues>({
+  const form = useForm<LayananAnakFormValues>({
     resolver: zodResolver(layananAnakSchema),
   })
 
@@ -48,7 +58,7 @@ export default function InputDataLayananAnak() {
         title: "Data berhasil disimpan",
         description: "Data layanan anak berhasil disimpan",
       })
-      reset() // Clear the form
+      form.reset() // Clear the form
       router.push("/success") // Redirect or show success message if needed
     } else {
       toast({
@@ -60,68 +70,98 @@ export default function InputDataLayananAnak() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col justify-start p-6">
-      <h1 className="mb-6 text-2xl font-bold">Tambah Data Layanan Anak</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         {/* Warga ID Field */}
-        <div>
-          <Label htmlFor="wargaId">Warga ID</Label>
-          <Input id="wargaId" {...register("wargaId")} />
-          {errors.wargaId && (
-            <p className="text-sm text-red-500">{errors.wargaId.message}</p>
+        <FormField
+          control={form.control}
+          name="wargaId"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="wargaId">Warga ID</Label>
+              <FormControl>
+                <Input id="wargaId" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Jenis Kelamin Field */}
-        <div>
-          <Label htmlFor="jenisKelamin">Jenis Kelamin</Label>
-          <select id="jenisKelamin" {...register("jenisKelamin")}>
-            <option value="LAKI_LAKI">Laki-Laki</option>
-            <option value="PEREMPUAN">Perempuan</option>
-          </select>
-          {errors.jenisKelamin && (
-            <p className="text-sm text-red-500">
-              {errors.jenisKelamin.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="jenisKelamin"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="jenisKelamin">Jenis Kelamin</Label>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Pilih Jenis Kelamin" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="LAKI_LAKI">Laki-Laki</SelectItem>
+                    <SelectItem value="PEREMPUAN">Perempuan</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Nama Orang Tua Field */}
-        <div>
-          <Label htmlFor="namaOrangTua">Nama Orang Tua</Label>
-          <Input id="namaOrangTua" {...register("namaOrangTua")} />
-          {errors.namaOrangTua && (
-            <p className="text-sm text-red-500">
-              {errors.namaOrangTua.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="namaOrangTua"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="namaOrangTua">Nama Orang Tua</Label>
+              <FormControl>
+                <Input id="namaOrangTua" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
-        {/* Boolean Fields */}
-        <div className="flex flex-col gap-2">
-          <Label>Status Gizi Kurang</Label>
-          <input type="checkbox" {...register("statusGiziKurang")} />
-
-          <Label>Status Gizi Buruk</Label>
-          <input type="checkbox" {...register("statusGiziBuruk")} />
-
-          <Label>Stunting</Label>
-          <input type="checkbox" {...register("stunting")} />
-
-          <Label>Imunisasi HbO</Label>
-          <input type="checkbox" {...register("imunisasiHbO")} />
-
-          <Label>Imunisasi Bcg Polio1</Label>
-          <input type="checkbox" {...register("imunisasiBcgPolio1")} />
-
-          <Label>Status Kelengkapan</Label>
-          <input type="checkbox" {...register("statusKelengkapan")} />
-        </div>
+        {/* Boolean Fields with Checkbox */}
+        {[
+          { name: "statusGiziKurang", label: "Status Gizi Kurang" },
+          { name: "statusGiziBuruk", label: "Status Gizi Buruk" },
+          { name: "stunting", label: "Stunting" },
+          { name: "imunisasiHbO", label: "Imunisasi HbO" },
+          { name: "imunisasiBcgPolio1", label: "Imunisasi Bcg Polio1" },
+          { name: "statusKelengkapan", label: "Status Kelengkapan" },
+        ].map(({ name, label }) => (
+          <FormField
+            key={name}
+            control={form.control}
+            name={name as keyof LayananAnakFormValues}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormControl>
+                    <Checkbox
+                      id={name}
+                      checked={field.value as boolean}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <Label htmlFor={name}>{label}</Label>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
 
         {/* Submit Button */}
         <Button type="submit">Simpan Data</Button>
       </form>
-    </main>
+    </Form>
   )
 }

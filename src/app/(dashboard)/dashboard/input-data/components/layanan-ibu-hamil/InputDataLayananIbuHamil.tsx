@@ -7,6 +7,14 @@ import { z } from "zod"
 
 import { toast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -40,12 +48,7 @@ type LayananIbuHamilFormValues = z.infer<typeof layananIbuHamilSchema>
 
 export default function InputDataLayananIbuHamil() {
   const router = useRouter()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<LayananIbuHamilFormValues>({
+  const form = useForm<LayananIbuHamilFormValues>({
     resolver: zodResolver(layananIbuHamilSchema),
   })
 
@@ -57,7 +60,7 @@ export default function InputDataLayananIbuHamil() {
         title: "Data berhasil disimpan",
         description: "Data layanan ibu hamil berhasil disimpan",
       })
-      reset() // Clear the form
+      form.reset() // Clear the form
       router.push("/success") // Redirect or show success message if needed
     } else {
       toast({
@@ -69,96 +72,121 @@ export default function InputDataLayananIbuHamil() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col justify-start p-6">
-      <h1 className="mb-6 text-2xl font-bold">Tambah Data Layanan Ibu Hamil</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="mt-10 flex flex-col rounded-md"
+      >
         {/* Warga ID Field */}
-        <div>
-          <Label htmlFor="wargaId">Warga ID</Label>
-          <Input id="wargaId" {...register("wargaId")} />
-          {errors.wargaId && (
-            <p className="text-sm text-red-500">{errors.wargaId.message}</p>
+        <FormField
+          control={form.control}
+          name="wargaId"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="wargaId">Warga ID</Label>
+              <FormControl>
+                <Input id="wargaId" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Hari Pertama Haid Field */}
-        <div>
-          <Label htmlFor="hariPertamaHaid">Hari Pertama Haid</Label>
-          <Input
-            id="hariPertamaHaid"
-            type="date"
-            {...register("hariPertamaHaid")}
-          />
-          {errors.hariPertamaHaid && (
-            <p className="text-sm text-red-500">
-              {errors.hariPertamaHaid.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="hariPertamaHaid"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="hariPertamaHaid">Hari Pertama Haid</Label>
+              <FormControl>
+                <Input id="hariPertamaHaid" type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Tanggal Perkiraan Lahir Field */}
-        <div>
-          <Label htmlFor="tanggalPerkiraanLahir">Tanggal Perkiraan Lahir</Label>
-          <Input
-            id="tanggalPerkiraanLahir"
-            type="date"
-            {...register("tanggalPerkiraanLahir")}
-          />
-          {errors.tanggalPerkiraanLahir && (
-            <p className="text-sm text-red-500">
-              {errors.tanggalPerkiraanLahir.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="tanggalPerkiraanLahir"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="tanggalPerkiraanLahir">
+                Tanggal Perkiraan Lahir
+              </Label>
+              <FormControl>
+                <Input id="tanggalPerkiraanLahir" type="date" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Umur Kehamilan Field */}
-        <div>
-          <Label htmlFor="umurKehamilan">Umur Kehamilan</Label>
-          <Input
-            id="umurKehamilan"
-            type="number"
-            {...register("umurKehamilan", { valueAsNumber: true })}
-          />
-          {errors.umurKehamilan && (
-            <p className="text-sm text-red-500">
-              {errors.umurKehamilan.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="umurKehamilan"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="umurKehamilan">Umur Kehamilan</Label>
+              <FormControl>
+                <Input id="umurKehamilan" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
         {/* Periksa Kehamilan Field */}
-        <div>
-          <Label htmlFor="periksaKehamilan">Periksa Kehamilan</Label>
-          <Input id="periksaKehamilan" {...register("periksaKehamilan")} />
-          {errors.periksaKehamilan && (
-            <p className="text-sm text-red-500">
-              {errors.periksaKehamilan.message}
-            </p>
+        <FormField
+          control={form.control}
+          name="periksaKehamilan"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor="periksaKehamilan">Periksa Kehamilan</Label>
+              <FormControl>
+                <Input id="periksaKehamilan" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
           )}
-        </div>
+        />
 
-        {/* Boolean Fields */}
-        <div className="flex flex-col gap-2">
-          <Label>Status Gizi</Label>
-          <input type="checkbox" {...register("statusGizi")} />
-
-          <Label>Status Periksa Lengkap</Label>
-          <input type="checkbox" {...register("statusPeriksaLengkap")} />
-
-          <Label>Minum TTD</Label>
-          <input type="checkbox" {...register("minumTtd")} />
-
-          <Label>KP Pasca Bersalin</Label>
-          <input type="checkbox" {...register("kpPascaBersalin")} />
-
-          <Label>Tambahan Gizi</Label>
-          <input type="checkbox" {...register("tambahanGizi")} />
-        </div>
+        {/* Boolean Fields with ShadCN Checkbox */}
+        {[
+          { name: "statusGizi", label: "Status Gizi" },
+          { name: "statusPeriksaLengkap", label: "Status Periksa Lengkap" },
+          { name: "minumTtd", label: "Minum TTD" },
+          { name: "kpPascaBersalin", label: "KP Pasca Bersalin" },
+          { name: "tambahanGizi", label: "Tambahan Gizi" },
+        ].map(({ name, label }) => (
+          <FormField
+            key={name}
+            control={form.control}
+            name={name as keyof LayananIbuHamilFormValues}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center gap-2">
+                  <FormControl>
+                    <Checkbox
+                      id={name}
+                      checked={field.value as boolean}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <Label htmlFor={name}>{label}</Label>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
 
         {/* Submit Button */}
         <Button type="submit">Simpan Data</Button>
       </form>
-    </main>
+    </Form>
   )
 }
