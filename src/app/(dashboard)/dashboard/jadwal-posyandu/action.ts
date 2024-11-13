@@ -3,7 +3,7 @@ import db from "@/lib/db"
 // Definisikan tipe data untuk jadwal posyandu
 interface JadwalPosyanduData {
   namaAcara: string
-  tanggal: string
+  tanggal: Date
   jam: string
 }
 

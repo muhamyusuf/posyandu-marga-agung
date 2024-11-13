@@ -1,5 +1,6 @@
 // action.ts
-import db from "@/lib/db"
+// src/actions/getWargaOptions.ts
+import prisma from "@/lib/prisma"
 
 export async function saveDataLayananRemajaPutri(data: {
   wargaId: string
@@ -27,4 +28,25 @@ export async function saveDataLayananRemajaPutri(data: {
   }
 
   return { success: true }
+}
+
+export async function getWargaOptions(query: string) {
+  const wargaData = await prisma.warga.findMany({
+    where: {
+      nama: {
+        contains: query,
+        mode: "insensitive",
+      },
+    },
+    select: {
+      id: true,
+      nama: true,
+    },
+    orderBy: {
+      nama: "asc",
+    },
+    take: 10, // Limit results for performance
+  })
+
+  return wargaData.map((warga) => ({ id: warga.id, name: warga.nama }))
 }
