@@ -1,8 +1,15 @@
-// action.ts
-
+"use server"
 import db from "@/lib/db"
+import { revalidatePath } from "next/cache"
 
-export async function saveDataLayananLansia(data: {
+export async function saveDataLayananLansia({
+  wargaId,
+  gds,
+  beratBadan,
+  tinggiBadan,
+  lingkarPinggang,
+  tekananDarah,
+}: {
   wargaId: string
   gds: number
   beratBadan: number
@@ -10,26 +17,30 @@ export async function saveDataLayananLansia(data: {
   lingkarPinggang: number
   tekananDarah: string
 }) {
-  //   try {
-  //     await prisma.layananLansia.create({
-  //       data: {
-  //         wargaId: data.wargaId,
-  //         gds: data.gds,
-  //         beratBadan: data.beratBadan,
-  //         tinggiBadan: data.tinggiBadan,
-  //         lingkarPinggang: data.lingkarPinggang,
-  //         tekananDarah: data.tekananDarah,
-  //       },
-  //     });
-  //     return { success: true };
-  //   } catch (error) {
-  //     console.error("Failed to save data:", error);
-  //     return { success: false, error: "Failed to save data" };
-  //   }
+  try {
+    const warga = await db.warga.findUnique({
+      where: { id: wargaId },
+    })
 
-  if (data.wargaId === "123") {
-    return { success: false, error: "Warga ID sudah terdaftar" }
+    if (!warga) {
+      return { success: false, error: "Data warga tidak ditemukan" }
+    }
+
+    await db.layananLansia.create({
+      data: {
+        wargaId: warga.id,
+        gds,
+        beratBadan,
+        tinggiBadan,
+        lingkarPinggang,
+        tekananDarah,
+      },
+    })
+
+    revalidatePath("/(dashboard)/dashboard/input-data/layanan-lansia")
+    return { success: true }
+  } catch (error) {
+    console.error("Terjadi kesalahan saat menyimpan data:", error)
+    return { success: false, error: "Gagal menyimpan data" }
   }
-
-  return { success: true }
 }

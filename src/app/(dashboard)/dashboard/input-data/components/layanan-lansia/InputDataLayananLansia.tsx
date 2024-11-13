@@ -35,34 +35,42 @@ import {
 
 import { saveDataLayananLansia } from "./action"
 
-// Define the validation schema with Zod
 const layananLansiaSchema = z.object({
   wargaId: z.string().min(1, { message: "Warga ID wajib diisi" }),
-  gds: z.number().min(0, { message: "GDS wajib diisi dan harus lebih dari 0" }),
-  beratBadan: z
-    .number()
-    .min(1, { message: "Berat Badan wajib diisi dan harus lebih dari 0" }),
-  tinggiBadan: z
-    .number()
-    .min(1, { message: "Tinggi Badan wajib diisi dan harus lebih dari 0" }),
-  lingkarPinggang: z
-    .number()
-    .min(1, { message: "Lingkar Pinggang wajib diisi dan harus lebih dari 0" }),
-  tekananDarah: z.string().min(1, { message: "Tekanan Darah wajib diisi" }),
+  gds: z.preprocess(
+    (val) => parseFloat(val as string),
+    z.number().min(0, { message: "GDS wajib diisi dengan angka" })
+  ),
+  beratBadan: z.preprocess(
+    (val) => parseFloat(val as string),
+    z.number().min(0, { message: "Berat Badan wajib diisi dengan angka" })
+  ),
+  tinggiBadan: z.preprocess(
+    (val) => parseFloat(val as string),
+    z.number().min(0, { message: "Tinggi Badan wajib diisi dengan angka" })
+  ),
+  lingkarPinggang: z.preprocess(
+    (val) => parseFloat(val as string),
+    z.number().min(0, { message: "Lingkar Pinggang wajib diisi dengan angka" })
+  ),
+  tekananDarah: z.preprocess(
+    (val) => val as string,
+    z.string().min(1, { message: "Tekanan Darah wajib diisi" })
+  ),
 })
 
 type LayananLansiaFormValues = z.infer<typeof layananLansiaSchema>
 
 export default function InputDataLayananLansia() {
   const router = useRouter()
-  const form = useForm<LayananLansiaFormValues>({
+  const form = useForm({
     resolver: zodResolver(layananLansiaSchema),
     defaultValues: {
       wargaId: "",
-      gds: undefined,
-      beratBadan: undefined,
-      tinggiBadan: undefined,
-      lingkarPinggang: undefined,
+      gds: 0,
+      beratBadan: 0,
+      tinggiBadan: 0,
+      lingkarPinggang: 0,
       tekananDarah: "",
     },
   })
@@ -113,25 +121,30 @@ export default function InputDataLayananLansia() {
     }
   }
 
-  const onSubmit = async (data: LayananLansiaFormValues) => {
-    const result = await saveDataLayananLansia(data)
+  async function onSubmit(values: LayananLansiaFormValues) {
+    const parsedValues = {
+      ...values,
+      gds: Number(values.gds),
+      beratBadan: Number(values.beratBadan),
+      tinggiBadan: Number(values.tinggiBadan),
+      lingkarPinggang: Number(values.lingkarPinggang),
+    }
 
-    if (result.success) {
+    const response = await saveDataLayananLansia(parsedValues)
+    if (response.success) {
       toast({
         title: "Data berhasil disimpan",
         description: "Data layanan lansia berhasil disimpan",
       })
-      form.reset() // Clear the form
-      // Redirect or show success message if needed
+      router.refresh()
     } else {
       toast({
         title: "Gagal menyimpan data",
-        description: result.error || "Terjadi kesalahan saat menyimpan data",
+        description: response.error || "Terjadi kesalahan saat menyimpan data",
         variant: "destructive",
       })
     }
   }
-
   return (
     <Form {...form}>
       <form
@@ -298,11 +311,7 @@ export default function InputDataLayananLansia() {
         />
 
         {/* Submit Button */}
-        <Button
-          type="submit"
-          className="mt-5"
-          disabled={!form.formState.isValid || form.formState.isSubmitting}
-        >
+        <Button type="submit" className="mt-5">
           {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
         </Button>
       </form>

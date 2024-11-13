@@ -60,7 +60,7 @@ export default function InputDataWarga() {
     // Calculate age based on tanggalLahir
     const age =
       new Date().getFullYear() - new Date(data.tanggalLahir).getFullYear()
-    const wargaDataWithAge = { ...data, umur: age }
+    const wargaDataWithAge = { ...data, tanggalLahir: new Date(data.tanggalLahir), umur: age }
 
     const result = await saveDataWarga(wargaDataWithAge)
 

@@ -113,8 +113,24 @@ model LayananKeluarga {
   updatedAt              DateTime @updatedAt
 }
 
-// Enum for gender in LayananAnak model
 enum JenisKelamin {
   LAKI_LAKI
   PEREMPUAN
+}
+
+model blog {
+  id                     String   @id @default(uuid())
+  createdAt              DateTime @default(now())
+  title                  String
+  image_url              String
+  is_premium             Boolean @default(false)
+  is_published           Boolean  @default(true)
+  blog_content           blog_content[]
+}
+
+model blog_content {
+  blog_id             String  @id @default(uuid())
+  blog                blog    @relation(fields: [blog_id], references: [id])
+  content             String
+  createdAt           DateTime @default(now())
 }
