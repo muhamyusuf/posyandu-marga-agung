@@ -1,3 +1,7 @@
+"use server"
+
+import { revalidatePath } from "next/cache"
+
 import db from "@/lib/db"
 
 // Definisikan tipe data untuk jadwal posyandu
@@ -8,27 +12,22 @@ interface JadwalPosyanduData {
 }
 
 export async function saveJadwalPosyandu(data: JadwalPosyanduData) {
-  // Inisialisasi Supabase client untuk autentikasi
+  try {
+    // Simpan data jadwal posyandu ke database
+    await db.jadwalPosyandu.create({
+      data: {
+        namaAcara: data.namaAcara,
+        tanggal: data.tanggal,
+        jam: data.jam,
+      },
+    })
 
-  //   try {
-  //     // Simpan data jadwal posyandu ke database menggunakan Prisma
-  //     const jadwal = await db.jadwalPosyandu.create({
-  //       data: {
-  //         namaAcara: data.namaAcara,
-  //         tanggal: new Date(data.tanggal), // Konversi ke Date
-  //         jam: data.jam,
-  //         userId: user.id, // Simpan id pengguna untuk referensi
-  //       },
-  //     })
-  //     return { success: true, data: jadwal }
-  //   } catch (error) {
-  //     console.error("Error saving jadwal posyandu:", error)
-  //     return { success: false, error: "Gagal menyimpan jadwal posyandu." }
-  //   }
+    // Revalidate path untuk memastikan data terbaru ditampilkan
+    revalidatePath("/(dashboard)/dashboard/jadwal-posyandu")
 
-  if (data) {
-    return { success: false, error: "Jadwal sudah terdaftar" }
+    return { success: true }
+  } catch (error) {
+    console.error("Terjadi kesalahan saat menyimpan jadwal:", error)
+    return { success: false, error: "Gagal menyimpan jadwal" }
   }
-
-  return { success: true }
 }

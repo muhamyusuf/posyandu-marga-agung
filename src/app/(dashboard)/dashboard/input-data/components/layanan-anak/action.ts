@@ -1,3 +1,7 @@
+"use server"
+
+import { revalidatePath } from "next/cache"
+
 import db from "@/lib/db"
 
 export async function saveDataLayananAnak(data: {
@@ -11,29 +15,37 @@ export async function saveDataLayananAnak(data: {
   imunisasiBcgPolio1: boolean
   statusKelengkapan: boolean
 }) {
-  //   try {
-  //     await db.layananAnak.create({
-  //       data: {
-  //         wargaId: data.wargaId,
-  //         jenisKelamin: data.jenisKelamin,
-  //         namaOrangTua: data.namaOrangTua,
-  //         statusGiziKurang: data.statusGiziKurang,
-  //         statusGiziBuruk: data.statusGiziBuruk,
-  //         stunting: data.stunting,
-  //         imunisasiHbO: data.imunisasiHbO,
-  //         imunisasiBcgPolio1: data.imunisasiBcgPolio1,
-  //         statusKelengkapan: data.statusKelengkapan,
-  //       },
-  //     })
-  //     return { success: true }
-  //   } catch (error) {
-  //     console.error("Failed to save data:", error)
-  //     return { success: false, error: "Failed to save data" }
-  //   }
+  try {
+    // Validasi apakah warga dengan ID tersebut ada
+    const warga = await db.warga.findUnique({
+      where: { id: data.wargaId },
+    })
 
-  if (data.wargaId === "123") {
-    return { success: false, error: "Warga ID sudah terdaftar" }
+    if (!warga) {
+      return { success: false, error: "Data warga tidak ditemukan" }
+    }
+
+    // Simpan data layanan anak
+    await db.layananAnak.create({
+      data: {
+        wargaId: data.wargaId,
+        jenisKelamin: data.jenisKelamin,
+        namaOrangTua: data.namaOrangTua,
+        statusGiziKurang: data.statusGiziKurang,
+        statusGiziBuruk: data.statusGiziBuruk,
+        stunting: data.stunting,
+        imunisasiHbO: data.imunisasiHbO,
+        imunisasiBcgPolio1: data.imunisasiBcgPolio1,
+        statusKelengkapan: data.statusKelengkapan,
+      },
+    })
+
+    // Revalidate path to refresh relevant page data
+    revalidatePath("/(dashboard)/dashboard/input-data/layanan-anak")
+
+    return { success: true }
+  } catch (error) {
+    console.error("Terjadi kesalahan saat menyimpan data:", error)
+    return { success: false, error: "Gagal menyimpan data" }
   }
-
-  return { success: true }
 }

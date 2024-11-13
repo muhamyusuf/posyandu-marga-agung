@@ -119,18 +119,27 @@ enum JenisKelamin {
 }
 
 model blog {
-  id                     String   @id @default(uuid())
-  createdAt              DateTime @default(now())
-  title                  String
-  image_url              String
-  is_premium             Boolean @default(false)
-  is_published           Boolean  @default(true)
-  blog_content           blog_content[]
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  title        String
+  image_url    String
+  is_premium   Boolean        @default(false)
+  is_published Boolean        @default(true)
+  blog_content blog_content[]
 }
 
 model blog_content {
-  blog_id             String  @id @default(uuid())
-  blog                blog    @relation(fields: [blog_id], references: [id])
-  content             String
-  createdAt           DateTime @default(now())
+  blog_id   String   @id @default(uuid())
+  blog      blog     @relation(fields: [blog_id], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model JadwalPosyandu {
+  id        String   @id @default(uuid())
+  namaAcara String
+  tanggal   DateTime
+  jam       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -249,7 +249,12 @@ export default function InputDataLayananIbuHamil() {
             <FormItem>
               <Label htmlFor="umurKehamilan">Umur Kehamilan</Label>
               <FormControl>
-                <Input id="umurKehamilan" type="number" {...field} />
+                <Input
+                  id="umurKehamilan"
+                  type="number"
+                  {...field}
+                  onChange={(event) => field.onChange(+event.target.value)}
+                />
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>

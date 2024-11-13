@@ -1,4 +1,6 @@
-// action.ts
+"use server"
+
+import { revalidatePath } from "next/cache"
 
 import db from "@/lib/db"
 
@@ -18,34 +20,42 @@ export async function saveDataLayananKeluarga(data: {
   pendampinganKeluarga: boolean
   ketahananPangan: boolean
 }) {
-  //   try {
-  //     await prisma.layananKeluarga.create({
-  //       data: {
-  //         wargaId: data.wargaId,
-  //         namaKepalaKeluarga: data.namaKepalaKeluarga,
-  //         dusun: data.dusun,
-  //         namaIbuHamil: data.namaIbuHamil,
-  //         anak_0_59_bulan: data.anak_0_59_bulan,
-  //         kategoriKeluargaRentan: data.kategoriKeluargaRentan,
-  //         kartuKeluarga: data.kartuKeluarga,
-  //         jambanSehat: data.jambanSehat,
-  //         sumberAirBersih: data.sumberAirBersih,
-  //         jaminanSosial: data.jaminanSosial,
-  //         jaminanKesehatan: data.jaminanKesehatan,
-  //         aksesSanitasi: data.aksesSanitasi,
-  //         pendampinganKeluarga: data.pendampinganKeluarga,
-  //         ketahananPangan: data.ketahananPangan,
-  //       },
-  //     });
-  //     return { success: true };
-  //   } catch (error) {
-  //     console.error("Failed to save data:", error);
-  //     return { success: false, error: "Failed to save data" };
-  //   }
+  try {
+    // Validasi apakah warga dengan ID tersebut ada
+    const warga = await db.warga.findUnique({
+      where: { id: data.wargaId },
+    })
 
-  if (data.wargaId === "123") {
-    return { success: false, error: "Warga ID sudah terdaftar" }
+    if (!warga) {
+      return { success: false, error: "Data warga tidak ditemukan" }
+    }
+
+    // Simpan data layanan keluarga
+    await db.layananKeluarga.create({
+      data: {
+        wargaId: data.wargaId,
+        namaKepalaKeluarga: data.namaKepalaKeluarga,
+        dusun: data.dusun,
+        namaIbuHamil: data.namaIbuHamil,
+        anak_0_59_bulan: data.anak_0_59_bulan,
+        kategoriKeluargaRentan: data.kategoriKeluargaRentan,
+        kartuKeluarga: data.kartuKeluarga,
+        jambanSehat: data.jambanSehat,
+        sumberAirBersih: data.sumberAirBersih,
+        jaminanSosial: data.jaminanSosial,
+        jaminanKesehatan: data.jaminanKesehatan,
+        aksesSanitasi: data.aksesSanitasi,
+        pendampinganKeluarga: data.pendampinganKeluarga,
+        ketahananPangan: data.ketahananPangan,
+      },
+    })
+
+    // Revalidate path to refresh the relevant page data
+    revalidatePath("/(dashboard)/dashboard/input-data/layanan-keluarga")
+
+    return { success: true }
+  } catch (error) {
+    console.error("Terjadi kesalahan saat menyimpan data:", error)
+    return { success: false, error: "Gagal menyimpan data" }
   }
-
-  return { success: true }
 }

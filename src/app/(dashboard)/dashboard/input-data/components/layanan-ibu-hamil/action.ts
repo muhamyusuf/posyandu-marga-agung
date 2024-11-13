@@ -1,4 +1,7 @@
-// action.ts
+"use server"
+
+import { revalidatePath } from "next/cache"
+
 import db from "@/lib/db"
 
 export async function saveDataLayananIbuHamil(data: {
@@ -13,30 +16,38 @@ export async function saveDataLayananIbuHamil(data: {
   kpPascaBersalin: boolean
   tambahanGizi: boolean
 }) {
-  //   try {
-  //     await prisma.layananIbuHamil.create({
-  //       data: {
-  //         wargaId: data.wargaId,
-  //         hariPertamaHaid: new Date(data.hariPertamaHaid),
-  //         tanggalPerkiraanLahir: new Date(data.tanggalPerkiraanLahir),
-  //         umurKehamilan: data.umurKehamilan,
-  //         periksaKehamilan: data.periksaKehamilan,
-  //         statusGizi: data.statusGizi,
-  //         statusPeriksaLengkap: data.statusPeriksaLengkap,
-  //         minumTtd: data.minumTtd,
-  //         kpPascaBersalin: data.kpPascaBersalin,
-  //         tambahanGizi: data.tambahanGizi,
-  //       },
-  //     });
-  //     return { success: true };
-  //   } catch (error) {
-  //     console.error("Failed to save data:", error);
-  //     return { success: false, error: "Failed to save data" };
-  //   }
+  try {
+    // Validasi apakah warga dengan ID tersebut ada
+    const warga = await db.warga.findUnique({
+      where: { id: data.wargaId },
+    })
 
-  if (data.wargaId === "123") {
-    return { success: false, error: "Warga ID sudah terdaftar" }
+    if (!warga) {
+      return { success: false, error: "Data warga tidak ditemukan" }
+    }
+
+    // Simpan data layanan ibu hamil
+    await db.layananIbuHamil.create({
+      data: {
+        wargaId: data.wargaId,
+        hariPertamaHaid: new Date(data.hariPertamaHaid),
+        tanggalPerkiraanLahir: new Date(data.tanggalPerkiraanLahir),
+        umurKehamilan: data.umurKehamilan,
+        periksaKehamilan: data.periksaKehamilan,
+        statusGizi: data.statusGizi,
+        statusPeriksaLengkap: data.statusPeriksaLengkap,
+        minumTtd: data.minumTtd,
+        kpPascaBersalin: data.kpPascaBersalin,
+        tambahanGizi: data.tambahanGizi,
+      },
+    })
+
+    // Revalidate path to refresh the relevant page data
+    revalidatePath("/(dashboard)/dashboard/input-data/layanan-ibu-hamil")
+
+    return { success: true }
+  } catch (error) {
+    console.error("Terjadi kesalahan saat menyimpan data:", error)
+    return { success: false, error: "Gagal menyimpan data" }
   }
-
-  return { success: true }
 }

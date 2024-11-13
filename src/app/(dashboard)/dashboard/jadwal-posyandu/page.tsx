@@ -62,6 +62,8 @@ export default function JadwalPosyanduPage() {
         title: "Jadwal berhasil disimpan",
         description: "Data jadwal posyandu berhasil disimpan",
       })
+
+      form.reset()
     } else {
       toast({
         title: "Gagal menyimpan jadwal",
