@@ -70,7 +70,7 @@ export default function InputDataLayananAnak() {
         description: "Data layanan anak berhasil disimpan",
       })
       form.reset() // Clear the form
-      router.push("/success") // Redirect or show success message if needed
+      // Redirect or show success message if needed
     } else {
       toast({
         title: "Gagal menyimpan data",

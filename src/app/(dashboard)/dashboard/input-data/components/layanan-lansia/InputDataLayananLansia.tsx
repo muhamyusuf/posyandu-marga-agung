@@ -60,7 +60,7 @@ export default function InputDataLayananLansia() {
         description: "Data layanan lansia berhasil disimpan",
       })
       form.reset() // Clear the form
-      router.push("/success") // Redirect or show success message if needed
+      // Redirect or show success message if needed
     } else {
       toast({
         title: "Gagal menyimpan data",

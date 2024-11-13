@@ -55,7 +55,7 @@ export default function InputDataLayananCalonPengantin() {
         description: "Data layanan calon pengantin berhasil disimpan",
       })
       form.reset() // Clear the form
-      router.push("/success") // Redirect or show success message if needed
+      // Redirect or show success message if needed
     } else {
       toast({
         title: "Gagal menyimpan data",

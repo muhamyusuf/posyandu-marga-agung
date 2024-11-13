@@ -60,7 +60,6 @@ export default function InputDataLayananKeluarga() {
         description: "Data layanan keluarga berhasil disimpan",
       })
       form.reset() // Clear the form
-      router.push("/success")
     } else {
       toast({
         title: "Gagal menyimpan data",
