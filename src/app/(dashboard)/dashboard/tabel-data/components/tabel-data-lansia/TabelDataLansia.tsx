@@ -1,3 +1,4 @@
+// src/app/(dashboard)/dashboard/tabel-data/components/tabel-data-lansia/TabelDataLansia.tsx
 "use client"
 
 import React, { useEffect, useState } from "react"
@@ -18,55 +19,75 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { getLayananLansiaData } from "./action" // Ensure this path is correct or create the module
+import { getLayananLansiaData, LayananLansia } from "./action"
 
-// Define types for LayananLansia based on your Prisma schema
-type LayananLansia = {
-  id: string
-  gds: number
-  beratBadan: number
-  tinggiBadan: number
-  lingkarPinggang: number
-  tekananDarah: string
-  createdAt: string // Assuming ISO string format for dates
+type TabelDataLansiaProps = {
+  year?: number
+  month?: string
 }
 
-// Define columns based on the LayananLansia model fields
-const columns: ColumnDef<LayananLansia>[] = [
-  { accessorKey: "gds", header: "GDS" },
-  { accessorKey: "beratBadan", header: "Berat Badan (kg)" },
-  { accessorKey: "tinggiBadan", header: "Tinggi Badan (cm)" },
-  { accessorKey: "lingkarPinggang", header: "Lingkar Pinggang (cm)" },
-  { accessorKey: "tekananDarah", header: "Tekanan Darah" },
-  {
-    accessorKey: "createdAt",
-    header: "Tanggal Pencatatan",
-    cell: (info) =>
-      new Date(info.getValue<string>()).toLocaleDateString("id-ID"),
-  },
-]
-
-export default function TabelDataLansia() {
+export default function TabelDataLansia({ year, month }: TabelDataLansiaProps) {
   const [data, setData] = useState<LayananLansia[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // Define table columns, including the new "Nama" column
+  const columns: ColumnDef<LayananLansia>[] = [
+    {
+      accessorKey: "warga.nama", // Access `nama` from `warga` relation
+      header: "Nama",
+      cell: (info) => info.getValue() || "Tidak Tersedia",
+    },
+    { accessorKey: "gds", header: "GDS" },
+    { accessorKey: "beratBadan", header: "Berat Badan (kg)" },
+    { accessorKey: "tinggiBadan", header: "Tinggi Badan (cm)" },
+    { accessorKey: "lingkarPinggang", header: "Lingkar Pinggang (cm)" },
+    { accessorKey: "tekananDarah", header: "Tekanan Darah" },
+    {
+      accessorKey: "createdAt",
+      header: "Tanggal Pencatatan",
+      cell: (info) =>
+        new Date(info.getValue<string>()).toLocaleDateString("id-ID"),
+    },
+  ]
 
   useEffect(() => {
-    async function fetchData() {
-      const layananData = await getLayananLansiaData()
-      setData(
-        layananData.map((item) => ({
-          ...item,
-          createdAt: item.createdAt.toISOString(),
-        }))
-      )
+    // Fetch data with filtering based on `year` and `month`
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        const layananData = await getLayananLansiaData(year, month)
+        setData(layananData)
+      } catch (error) {
+        console.error("Failed to load Layanan Lansia data:", error)
+      } finally {
+        setLoading(false)
+      }
     }
     fetchData()
-  }, [])
+  }, [year, month])
 
+  // Initialize table instance
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (loading) {
+    return (
+      <div className="p-4">
+        <p>Loading data...</p>
+      </div>
+    )
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="p-4">
+        <p>No data available for the selected filters.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -106,7 +127,6 @@ export default function TabelDataLansia() {
             ))}
           </TableBody>
         </Table>
-
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>

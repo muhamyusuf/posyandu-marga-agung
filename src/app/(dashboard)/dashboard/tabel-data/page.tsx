@@ -1,7 +1,7 @@
+// src/app/(dashboard)/dashboard/tabel-data/page.tsx
 "use client"
 
 import React, { useEffect, useState } from "react"
-
 import {
   Select,
   SelectContent,
@@ -17,64 +17,9 @@ import TabelDataKeluarga from "./components/tabel-data-keluarga/TabelDataKeluarg
 import TabelDataLansia from "./components/tabel-data-lansia/TabelDataLansia"
 import TabelDataRematri from "./components/tabel-data-rematri/TabelDataRematri"
 
-// Define mock data with explicit types
 const monthsByYear: { [key: number]: string[] } = {
-  2023: [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ],
-  2024: [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ],
-  2025: [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ],
-  2026: [
-    "Januari",
-    "Februari",
-    "Maret",
-    "April",
-    "Mei",
-    "Juni",
-    "Juli",
-    "Agustus",
-    "September",
-    "Oktober",
-    "November",
-    "Desember",
-  ],
+  2023: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+  2024: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
 }
 
 function Skeleton() {
@@ -102,6 +47,7 @@ export default function TableDataPage() {
   }, [])
 
   const handleLayananChange = (value: string) => {
+    setLoading(true)
     setSelectedLayanan(value)
     localStorage.setItem("selectedLayanan", value)
     setTimeout(() => setLoading(false), 300)
@@ -109,17 +55,32 @@ export default function TableDataPage() {
 
   const handleYearChange = (year: string) => {
     setSelectedYear(parseInt(year, 10))
-
     localStorage.setItem("tahun", year)
-
     setSelectedMonth(null)
   }
 
   const handleMonthChange = (month: string) => {
     setSelectedMonth(month)
-
     localStorage.setItem("bulan", month)
   }
+
+const renderSelectedTable = () => {
+    switch (selectedLayanan) {
+      // case "keluarga":
+      //   return <TabelDataKeluarga year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+      // case "remaja_putri":
+      //   return <TabelDataRematri year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+      // case "ibu_hamil":
+      //   return <TabelDataBumil year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+      // case "calon_pengantin":
+      //   return <TabelDataCatin year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+      // case "anak":
+      //   return <TabelDataAnak year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+      case "lansia":
+        return <TabelDataLansia year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+      default:
+        return null
+    }  }
 
   return (
     <main className="min-h-screen w-full">
@@ -127,19 +88,15 @@ export default function TableDataPage() {
         <label className="mb-1 block text-sm font-semibold">
           Tampilkan Data Tabel
         </label>
-
         <Select onValueChange={handleLayananChange} value={selectedLayanan}>
           <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
             <SelectValue placeholder="Pilih Tabel" />
           </SelectTrigger>
-
           <SelectContent>
             <SelectItem value="keluarga">Layanan Keluarga</SelectItem>
             <SelectItem value="remaja_putri">Layanan Remaja Putri</SelectItem>
             <SelectItem value="ibu_hamil">Layanan Ibu Hamil</SelectItem>
-            <SelectItem value="calon_pengantin">
-              Layanan Calon Pengantin
-            </SelectItem>
+            <SelectItem value="calon_pengantin">Layanan Calon Pengantin</SelectItem>
             <SelectItem value="anak">Layanan Anak</SelectItem>
             <SelectItem value="lansia">Layanan Lansia</SelectItem>
           </SelectContent>
@@ -148,19 +105,13 @@ export default function TableDataPage() {
 
       <div className="mb-4">
         <label className="mb-1 block text-sm font-semibold">Pilih Tahun</label>
-        <Select
-          onValueChange={handleYearChange}
-          value={selectedYear ? selectedYear.toString() : ""}
-        >
+        <Select onValueChange={handleYearChange} value={selectedYear ? selectedYear.toString() : ""}>
           <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
             <SelectValue placeholder="Pilih Tahun" />
           </SelectTrigger>
-
           <SelectContent>
             {Object.keys(monthsByYear).map((year) => (
-              <SelectItem key={year} value={year}>
-                {year}
-              </SelectItem>
+              <SelectItem key={year} value={year}>{year}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -168,19 +119,14 @@ export default function TableDataPage() {
 
       {selectedYear && (
         <div className="mb-4">
-          <label className="mb-1 block text-sm font-semibold">
-            Pilih Bulan
-          </label>
+          <label className="mb-1 block text-sm font-semibold">Pilih Bulan</label>
           <Select onValueChange={handleMonthChange} value={selectedMonth || ""}>
             <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
               <SelectValue placeholder="Pilih Bulan" />
             </SelectTrigger>
-
             <SelectContent>
               {monthsByYear[selectedYear]?.map((month) => (
-                <SelectItem key={month} value={month}>
-                  {month}
-                </SelectItem>
+                <SelectItem key={month} value={month}>{month}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -188,23 +134,7 @@ export default function TableDataPage() {
       )}
 
       <div className="min-w-[300px] sm:min-w-[400px]">
-        {loading ? (
-          <Skeleton />
-        ) : selectedLayanan === "keluarga" ? (
-          <>
-            <TabelDataKeluarga />
-          </>
-        ) : selectedLayanan === "remaja_putri" ? (
-          <TabelDataRematri />
-        ) : selectedLayanan === "ibu_hamil" ? (
-          <TabelDataBumil />
-        ) : selectedLayanan === "calon_pengantin" ? (
-          <TabelDataCatin />
-        ) : selectedLayanan === "anak" ? (
-          <TabelDataAnak />
-        ) : selectedLayanan === "lansia" ? (
-          <TabelDataLansia />
-        ) : null}
+        {loading ? <Skeleton /> : renderSelectedTable()}
       </div>
     </main>
   )
