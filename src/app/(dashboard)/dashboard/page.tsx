@@ -5,6 +5,8 @@ import { ChartDemo1 } from "@/components/charts/chart1"
 import { ChartDemo2 } from "@/components/charts/chart2"
 import { ChartDemo3 } from "@/components/charts/chart3"
 import { ChartDemo4 } from "@/components/charts/chart4"
+import { ChartDemo5 } from "@/components/charts/chart5"
+import { ChartDemo6 } from "@/components/charts/chart6"
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -17,17 +19,19 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col justify-start">
+    <main className="flex min-h-screen w-full flex-col justify-start">
       <h1 className="text-2xl font-bold">Dashboard Monitoring</h1>
 
       <div className="mt-10">
         <h2 className="font-bold">Report Data Posyandu</h2>
       </div>
 
-      <div className="mt-10 flex flex-wrap justify-center gap-5 md:justify-start">
+      <div className="mt-10 flex flex-wrap justify-center gap-2 md:justify-start">
+        <ChartDemo3 />
+        <ChartDemo5 />
+        <ChartDemo6 />
         <ChartDemo1 />
         <ChartDemo2 />
-        <ChartDemo3 />
       </div>
 
       <div className="mt-10 w-full">

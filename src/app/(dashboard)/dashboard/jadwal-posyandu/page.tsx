@@ -84,7 +84,7 @@ export default function JadwalPosyanduPage() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="mt-10 flex min-w-[300px] flex-col rounded-md sm:min-w-[400px]"
+            className="flex min-w-[300px] flex-col rounded-md sm:min-w-[400px]"
           >
             {/* Nama Acara Field */}
             <FormField
@@ -172,7 +172,7 @@ export default function JadwalPosyanduPage() {
               className="mt-4"
               disabled={!form.formState.isValid || form.formState.isSubmitting}
             >
-              Simpan Jadwal
+              {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Jadwal"}
             </Button>
           </form>
         </Form>

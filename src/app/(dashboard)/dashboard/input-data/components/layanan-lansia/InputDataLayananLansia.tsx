@@ -311,7 +311,11 @@ export default function InputDataLayananLansia() {
         />
 
         {/* Submit Button */}
-        <Button type="submit" className="mt-5">
+        <Button
+          type="submit"
+          className="mt-5"
+          disabled={!form.formState.isValid || form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
         </Button>
       </form>

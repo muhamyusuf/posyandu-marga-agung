@@ -18,31 +18,34 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description =
-  "Grafik batang dengan label untuk pemeriksaan ibu hamil"
+export const description = "Grafik batang dengan label untuk pemeriksaan anak"
 
-// Data mock untuk jumlah pemeriksaan ibu hamil per bulan
+// Data mock untuk jumlah pemeriksaan kesehatan anak per bulan
 const chartData = [
-  { bulan: "Januari", pemeriksaan: 25 },
-  { bulan: "Februari", pemeriksaan: 30 },
-  { bulan: "Maret", pemeriksaan: 20 },
-  { bulan: "April", pemeriksaan: 35 },
-  { bulan: "Mei", pemeriksaan: 28 },
-  { bulan: "Juni", pemeriksaan: 40 },
+  { bulan: "Januari", imunisasi: 45, statusGizi: 30 },
+  { bulan: "Februari", imunisasi: 50, statusGizi: 28 },
+  { bulan: "Maret", imunisasi: 40, statusGizi: 25 },
+  { bulan: "April", imunisasi: 35, statusGizi: 22 },
+  { bulan: "Mei", imunisasi: 60, statusGizi: 32 },
+  { bulan: "Juni", imunisasi: 55, statusGizi: 30 },
 ]
 
 const chartConfig = {
-  pemeriksaan: {
-    label: "Pemeriksaan Ibu Hamil",
+  imunisasi: {
+    label: "Pemeriksaan Imunisasi",
     color: "hsl(var(--chart-1))",
+  },
+  statusGizi: {
+    label: "Pemeriksaan Status Gizi",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
-export function ChartDemo3() {
+export function ChartDemo6() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Jumlah Pemeriksaan Ibu Hamil</CardTitle>
+        <CardTitle>Jumlah Pemeriksaan Kesehatan Anak</CardTitle>
         <CardDescription>Periode Januari - Juni</CardDescription>
       </CardHeader>
       <CardContent>
@@ -66,11 +69,15 @@ export function ChartDemo3() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar
-              dataKey="pemeriksaan"
-              fill="var(--color-pemeriksaan)"
-              radius={8}
-            >
+            <Bar dataKey="imunisasi" fill="hsl(var(--chart-1))" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
+            <Bar dataKey="statusGizi" fill="hsl(var(--chart-2))" radius={8}>
               <LabelList
                 position="top"
                 offset={12}
@@ -83,11 +90,11 @@ export function ChartDemo3() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Tren pemeriksaan meningkat bulan ini{" "}
+          Tren pemeriksaan anak meningkat bulan ini{" "}
           <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Menampilkan total pemeriksaan ibu hamil per bulan
+          Menampilkan total pemeriksaan imunisasi dan status gizi anak per bulan
         </div>
       </CardFooter>
     </Card>

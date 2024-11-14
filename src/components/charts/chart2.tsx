@@ -19,52 +19,43 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description = "A donut chart with text"
+export const description = "Grafik Donat dengan teks untuk Status Gizi Anak"
 
+// Data mock untuk status gizi anak di posyandu
 const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
+  { status: "Gizi Baik", jumlah: 150, fill: "hsl(var(--chart-1))" },
+  { status: "Kurang Gizi", jumlah: 80, fill: "hsl(var(--chart-2))" },
+  { status: "Gizi Buruk", jumlah: 45, fill: "hsl(var(--chart-3))" },
 ]
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  jumlah: {
+    label: "Jumlah Anak",
   },
-  chrome: {
-    label: "Chrome",
+  "Gizi Baik": {
+    label: "Gizi Baik",
     color: "hsl(var(--chart-1))",
   },
-  safari: {
-    label: "Safari",
+  "Kurang Gizi": {
+    label: "Kurang Gizi",
     color: "hsl(var(--chart-2))",
   },
-  firefox: {
-    label: "Firefox",
+  "Gizi Buruk": {
+    label: "Gizi Buruk",
     color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
   },
 } satisfies ChartConfig
 
 export function ChartDemo2() {
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0)
+  const totalAnak = React.useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.jumlah, 0)
   }, [])
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Status Gizi Anak</CardTitle>
+        <CardDescription>Data Terkini</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -78,8 +69,8 @@ export function ChartDemo2() {
             />
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
+              dataKey="jumlah"
+              nameKey="status"
               innerRadius={60}
               strokeWidth={5}
             >
@@ -98,14 +89,14 @@ export function ChartDemo2() {
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          {totalAnak.toLocaleString()}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Anak
                         </tspan>
                       </text>
                     )
@@ -118,10 +109,12 @@ export function ChartDemo2() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Tren status gizi menunjukkan peningkatan{" "}
+          <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Menampilkan distribusi status gizi anak berdasarkan data posyandu
+          terbaru.
         </div>
       </CardFooter>
     </Card>

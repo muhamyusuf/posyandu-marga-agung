@@ -10,12 +10,72 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import TabelDataAnak from "./tabel-data-anak"
-import TabelDataBumil from "./tabel-data-bumil"
-import TabelDataCatin from "./tabel-data-Catin"
-import TabelDataKeluarga from "./tabel-data-keluarga"
-import TabelDataLansia from "./tabel-data-lansia"
-import TabelDataRematri from "./tabel-data-Rematri"
+import TabelDataAnak from "./components/tabel-data-anak/TabelDataAnak"
+import TabelDataBumil from "./components/tabel-data-bumil/TabelDataBumil"
+import TabelDataCatin from "./components/tabel-data-catin/TabelDataCatin"
+import TabelDataKeluarga from "./components/tabel-data-keluarga/TabelDataKeluarga"
+import TabelDataLansia from "./components/tabel-data-lansia/TabelDataLansia"
+import TabelDataRematri from "./components/tabel-data-rematri/TabelDataRematri"
+
+// Define mock data with explicit types
+const monthsByYear: { [key: number]: string[] } = {
+  2023: [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ],
+  2024: [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ],
+  2025: [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ],
+  2026: [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ],
+}
 
 function Skeleton() {
   return (
@@ -29,22 +89,36 @@ function Skeleton() {
 
 export default function TableDataPage() {
   const [selectedLayanan, setSelectedLayanan] = useState("keluarga")
+  const [selectedYear, setSelectedYear] = useState<number | null>(null)
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Load selectedLayanan from localStorage on initial load
   useEffect(() => {
     const storedLayanan = localStorage.getItem("selectedLayanan")
     if (storedLayanan) {
       setSelectedLayanan(storedLayanan)
     }
-    setLoading(false) // Initial load complete, hide skeleton
+    setLoading(false)
   }, [])
 
-  // Show skeleton while loading a new table
   const handleLayananChange = (value: string) => {
     setSelectedLayanan(value)
     localStorage.setItem("selectedLayanan", value)
-    setTimeout(() => setLoading(false), 300) // Simulate loading delay
+    setTimeout(() => setLoading(false), 300)
+  }
+
+  const handleYearChange = (year: string) => {
+    setSelectedYear(parseInt(year, 10))
+
+    localStorage.setItem("tahun", year)
+
+    setSelectedMonth(null)
+  }
+
+  const handleMonthChange = (month: string) => {
+    setSelectedMonth(month)
+
+    localStorage.setItem("bulan", month)
   }
 
   return (
@@ -54,7 +128,6 @@ export default function TableDataPage() {
           Tampilkan Data Tabel
         </label>
 
-        {/* ShadCN Select Component */}
         <Select onValueChange={handleLayananChange} value={selectedLayanan}>
           <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
             <SelectValue placeholder="Pilih Tabel" />
@@ -73,18 +146,53 @@ export default function TableDataPage() {
         </Select>
       </div>
 
+      <div className="mb-4">
+        <label className="mb-1 block text-sm font-semibold">Pilih Tahun</label>
+        <Select
+          onValueChange={handleYearChange}
+          value={selectedYear ? selectedYear.toString() : ""}
+        >
+          <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
+            <SelectValue placeholder="Pilih Tahun" />
+          </SelectTrigger>
+
+          <SelectContent>
+            {Object.keys(monthsByYear).map((year) => (
+              <SelectItem key={year} value={year}>
+                {year}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {selectedYear && (
+        <div className="mb-4">
+          <label className="mb-1 block text-sm font-semibold">
+            Pilih Bulan
+          </label>
+          <Select onValueChange={handleMonthChange} value={selectedMonth || ""}>
+            <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
+              <SelectValue placeholder="Pilih Bulan" />
+            </SelectTrigger>
+
+            <SelectContent>
+              {monthsByYear[selectedYear]?.map((month) => (
+                <SelectItem key={month} value={month}>
+                  {month}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       <div className="min-w-[300px] sm:min-w-[400px]">
-        {/* Conditional Rendering with Loading Skeleton */}
         {loading ? (
           <Skeleton />
         ) : selectedLayanan === "keluarga" ? (
           <>
             <TabelDataKeluarga />
-            <TabelDataAnak />
-            <TabelDataBumil />
-            <TabelDataRematri />
-            <TabelDataLansia />
-            <TabelDataCatin />
           </>
         ) : selectedLayanan === "remaja_putri" ? (
           <TabelDataRematri />
@@ -94,9 +202,9 @@ export default function TableDataPage() {
           <TabelDataCatin />
         ) : selectedLayanan === "anak" ? (
           <TabelDataAnak />
-        ) : (
-          <TabelDataLansia />
-        )}
+        ) : selectedLayanan === "lansia" ? (
+          <TabelDataAnak />
+        ) : null}
       </div>
     </main>
   )

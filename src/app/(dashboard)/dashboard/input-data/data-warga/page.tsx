@@ -60,7 +60,11 @@ export default function InputDataWarga() {
     // Calculate age based on tanggalLahir
     const age =
       new Date().getFullYear() - new Date(data.tanggalLahir).getFullYear()
-    const wargaDataWithAge = { ...data, tanggalLahir: new Date(data.tanggalLahir), umur: age }
+    const wargaDataWithAge = {
+      ...data,
+      tanggalLahir: new Date(data.tanggalLahir),
+      umur: age,
+    }
 
     const result = await saveDataWarga(wargaDataWithAge)
 
@@ -69,6 +73,8 @@ export default function InputDataWarga() {
         title: "Data berhasil disimpan",
         description: "Data warga berhasil disimpan",
       })
+
+      form.reset()
     } else {
       toast({
         title: "Gagal menyimpan data",
@@ -153,7 +159,7 @@ export default function InputDataWarga() {
             className="mt-5"
             disabled={!form.formState.isValid || form.formState.isSubmitting}
           >
-            Simpan Data
+            {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
           </Button>
         </form>
       </Form>

@@ -18,31 +18,34 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
-export const description =
-  "Grafik batang dengan label untuk pemeriksaan ibu hamil"
+export const description = "Grafik batang dengan label untuk pemeriksaan lansia"
 
-// Data mock untuk jumlah pemeriksaan ibu hamil per bulan
+// Data mock untuk jumlah pemeriksaan kesehatan lansia per bulan
 const chartData = [
-  { bulan: "Januari", pemeriksaan: 25 },
-  { bulan: "Februari", pemeriksaan: 30 },
-  { bulan: "Maret", pemeriksaan: 20 },
-  { bulan: "April", pemeriksaan: 35 },
-  { bulan: "Mei", pemeriksaan: 28 },
-  { bulan: "Juni", pemeriksaan: 40 },
+  { bulan: "Januari", pemeriksaanGds: 12, pemeriksaanTekananDarah: 18 },
+  { bulan: "Februari", pemeriksaanGds: 15, pemeriksaanTekananDarah: 22 },
+  { bulan: "Maret", pemeriksaanGds: 10, pemeriksaanTekananDarah: 16 },
+  { bulan: "April", pemeriksaanGds: 18, pemeriksaanTekananDarah: 24 },
+  { bulan: "Mei", pemeriksaanGds: 20, pemeriksaanTekananDarah: 30 },
+  { bulan: "Juni", pemeriksaanGds: 25, pemeriksaanTekananDarah: 28 },
 ]
 
 const chartConfig = {
-  pemeriksaan: {
-    label: "Pemeriksaan Ibu Hamil",
+  pemeriksaanGds: {
+    label: "Pemeriksaan GDS",
     color: "hsl(var(--chart-1))",
+  },
+  pemeriksaanTekananDarah: {
+    label: "Pemeriksaan Tekanan Darah",
+    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig
 
-export function ChartDemo3() {
+export function ChartDemo5() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Jumlah Pemeriksaan Ibu Hamil</CardTitle>
+        <CardTitle>Jumlah Pemeriksaan Lansia</CardTitle>
         <CardDescription>Periode Januari - Juni</CardDescription>
       </CardHeader>
       <CardContent>
@@ -66,9 +69,17 @@ export function ChartDemo3() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
+            <Bar dataKey="pemeriksaanGds" fill="hsl(var(--chart-1))" radius={8}>
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Bar>
             <Bar
-              dataKey="pemeriksaan"
-              fill="var(--color-pemeriksaan)"
+              dataKey="pemeriksaanTekananDarah"
+              fill="hsl(var(--chart-2))"
               radius={8}
             >
               <LabelList
@@ -87,7 +98,7 @@ export function ChartDemo3() {
           <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Menampilkan total pemeriksaan ibu hamil per bulan
+          Menampilkan total pemeriksaan GDS dan tekanan darah lansia per bulan
         </div>
       </CardFooter>
     </Card>
