@@ -1,12 +1,25 @@
+// src/app/(guest)/berita-artikel/page.tsx
 import Image from "next/image"
 import Link from "next/link"
-import { ArtikelData } from "@/constants/artikeldata"
-
+import { readBlog } from "@/app/(dashboard)/dashboard/berita-artikel/action"
 import CardBeritaArtikel from "@/components/CardBeritaArtikel"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
 
-export default function BeritaArtikelPage() {
+type BlogType = {
+  id: string;
+  title: string;
+  image_url: string;
+  is_premium: boolean;
+  is_published: boolean;
+  createdAt: Date;
+  blog_content: { content: string; createdAt: Date; blog_id: string }[];
+};
+
+export default async function BeritaArtikelPage() {
+  // Fetch published blog articles from the database
+  const articles: BlogType[] = await readBlog();
+
   return (
     <main className="container min-h-screen">
       <Navbar />
@@ -44,13 +57,12 @@ export default function BeritaArtikelPage() {
         <h2 className="text-2xl font-bold">List Berita & Artikel</h2>
 
         <div className="mt-5 flex w-fit flex-wrap gap-2">
-          {ArtikelData.map(({ id, title, img, desc }, index) => (
-            <Link href={`/berita-artikel/${id}`}>
+          {articles.map(({ id, title, image_url, blog_content }) => (
+            <Link key={id} href={`/berita-artikel/${id}`}>
               <CardBeritaArtikel
-                key={index}
-                img={img}
+                img={image_url}
                 title={title}
-                desc={desc}
+                desc={blog_content[0]?.content.slice(0, 100) || ""}
               />
             </Link>
           ))}

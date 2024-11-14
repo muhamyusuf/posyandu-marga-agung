@@ -1,26 +1,18 @@
+// src/app/page.tsx
 import Image from "next/image"
 import Link from "next/link"
-import { contents } from "@/constants/artikeldata"
-
+import { readBlog } from "@/app/(dashboard)/dashboard/berita-artikel/action"
 import { siteConfig } from "@/config/site"
-import { cn } from "@/lib/utils"
-import { Button, buttonVariants } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { CalendarDemo } from "@/components/calendar"
+import { Button } from "@/components/ui/button"
 import CardBeritaArtikel from "@/components/CardBeritaArtikel"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
+import { CalendarDemo } from "@/components/calendar"
 
-export default function Home() {
+export default async function Home() {
+  // Fetch a limited number of articles (e.g., the latest 3 articles)
+  const articles = await readBlog();
+
   return (
     <main className="container min-h-screen">
       <Navbar />
@@ -75,18 +67,19 @@ export default function Home() {
         <h2 className="text-2xl font-bold">List Berita & Artikel</h2>
 
         <div className="mt-5 flex w-fit flex-wrap gap-2">
-          {contents.map(({ title, img, desc }, index) => (
-            <CardBeritaArtikel
-              key={index}
-              img={img}
-              title={title}
-              desc={desc}
-            />
+          {articles.slice(0, 3).map(({ id, title, image_url, blog_content }) => (
+            <Link key={id} href={`/berita-artikel/${id}`}>
+              <CardBeritaArtikel
+                img={image_url}
+                title={title}
+                desc={blog_content[0]?.content.slice(0, 100) || ""}
+              />
+            </Link>
           ))}
         </div>
 
         <Link href="/berita-artikel" className="mt-10 flex w-fit">
-          <Button type="submit" size={"sm"} className="w-full">
+          <Button type="submit" size="sm" className="w-full">
             Lihat Semua Berita & Artikel
           </Button>
         </Link>

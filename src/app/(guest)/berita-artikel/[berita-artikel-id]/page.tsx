@@ -1,9 +1,7 @@
-// app/[berita-artikel-id]/page.tsx
-
+// src/app/(guest)/berita-artikel/[berita-artikel-id]/page.tsx
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { ArtikelData } from "@/constants/artikeldata" // Make sure your data is accessible here
-
+import { readBlogDeatailById } from "@/app/(dashboard)/dashboard/berita-artikel/action"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
 
@@ -13,18 +11,11 @@ type Props = {
   }
 }
 
-// Find article based on the id from params
-const getArtikelById = (id: string) => {
-  return ArtikelData.find(
-    (artikel) => artikel.title.toLowerCase().replace(/ /g, "-") === id
-  )
-}
-
-export default function ArticlePage({ params }: Props) {
+export default async function ArticlePage({ params }: Props) {
   const { "berita-artikel-id": artikelId } = params
-  const artikel = getArtikelById(artikelId)
+  const artikel = await readBlogDeatailById(artikelId)
 
-  // Handle if the article is not found
+  // If `artikel` is null, return 404
   if (!artikel) {
     return notFound()
   }
@@ -42,7 +33,6 @@ export default function ArticlePage({ params }: Props) {
             alt="Posyandu Marga Agung"
             className="h-32 w-36 rounded-md border"
           />
-
           <Image
             src="/logo-sgds.png"
             width={1000}
@@ -57,13 +47,13 @@ export default function ArticlePage({ params }: Props) {
         </h1>
 
         <p className="max-w-[42rem] text-sm font-normal leading-normal text-muted-foreground">
-          {artikel.desc}
+          {artikel.blog_content[0]?.content.slice(0, 150) || ""}
         </p>
       </section>
 
       <section className="mx-auto mt-10 flex w-full flex-col">
         <Image
-          src={artikel.img}
+          src={artikel.image_url}
           alt={artikel.title}
           width={600}
           height={400}
@@ -71,7 +61,7 @@ export default function ArticlePage({ params }: Props) {
         />
 
         <div className="mx-auto max-w-5xl py-20">
-          <p>{artikel.contents}</p>
+          <p>{artikel.blog_content[0]?.content || "No content available"}</p>
         </div>
       </section>
 
