@@ -203,7 +203,7 @@ export default function TableDataPage() {
         ) : selectedLayanan === "anak" ? (
           <TabelDataAnak />
         ) : selectedLayanan === "lansia" ? (
-          <TabelDataAnak />
+          <TabelDataLansia />
         ) : null}
       </div>
     </main>

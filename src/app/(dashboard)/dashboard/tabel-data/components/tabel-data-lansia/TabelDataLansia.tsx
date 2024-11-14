@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -18,6 +18,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { getLayananLansiaData } from "./action" // Ensure this path is correct or create the module
+
 // Define types for LayananLansia based on your Prisma schema
 type LayananLansia = {
   id: string
@@ -28,20 +30,6 @@ type LayananLansia = {
   tekananDarah: string
   createdAt: string // Assuming ISO string format for dates
 }
-
-// Define mock data
-const mockData: LayananLansia[] = [
-  {
-    id: "1",
-    gds: 5,
-    beratBadan: 60.5,
-    tinggiBadan: 165.0,
-    lingkarPinggang: 85.0,
-    tekananDarah: "120/80",
-    createdAt: "2023-01-10T00:00:00Z",
-  },
-  // Add more mock rows as needed
-]
 
 // Define columns based on the LayananLansia model fields
 const columns: ColumnDef<LayananLansia>[] = [
@@ -59,8 +47,23 @@ const columns: ColumnDef<LayananLansia>[] = [
 ]
 
 export default function TabelDataLansia() {
+  const [data, setData] = useState<LayananLansia[]>([])
+
+  useEffect(() => {
+    async function fetchData() {
+      const layananData = await getLayananLansiaData()
+      setData(
+        layananData.map((item) => ({
+          ...item,
+          createdAt: item.createdAt.toISOString(),
+        }))
+      )
+    }
+    fetchData()
+  }, [])
+
   const table = useReactTable({
-    data: mockData,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
