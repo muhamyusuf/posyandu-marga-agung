@@ -1,9 +1,11 @@
 // src/app/(guest)/berita-artikel/[berita-artikel-id]/page.tsx
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { readBlogDeatailById } from "@/app/(dashboard)/dashboard/berita-artikel/action"
+
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
+import { readBlogDeatailById } from "@/app/(dashboard)/dashboard/berita-artikel/action"
+import MarkdownPreview from "@/app/(dashboard)/dashboard/berita-artikel/component/MarkdownPreview"
 
 type Props = {
   params: {
@@ -61,7 +63,7 @@ export default async function ArticlePage({ params }: Props) {
         />
 
         <div className="mx-auto max-w-5xl py-20">
-          <p>{artikel.blog_content[0]?.content || "No content available"}</p>
+          <MarkdownPreview content={artikel.blog_content[0]?.content} />
         </div>
       </section>
 
