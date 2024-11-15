@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   }
 
   return (
-    <main className="flex min-h-screen w-full flex-col justify-start">
+    <main className="flex min-h-screen w-full max-w-[1280px] flex-col justify-start">
       <h1 className="text-2xl font-bold">Dashboard Monitoring</h1>
 
       <div className="mt-10">
@@ -34,7 +34,7 @@ export default async function DashboardPage() {
         <ChartDemo2 />
       </div>
 
-      <div className="mt-10 w-full">
+      <div className="mt-2 w-full">
         <ChartDemo4 />
       </div>
     </main>

@@ -1,4 +1,5 @@
 "use client"
+
 import { ReactNode, useState, useTransition } from "react"
 import Image from "next/image"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -6,6 +7,7 @@ import { EyeOpenIcon, Pencil1Icon, RocketIcon } from "@radix-ui/react-icons"
 import { Save } from "lucide-react"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+
 import { IBlogDetial, IBlogForm } from "@/types/blog"
 import { cn } from "@/lib/utils"
 import {
@@ -18,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
+
 import MarkdownPreview from "./component/MarkdownPreview"
 import { BlogFormSchema, BlogFormSchemaType } from "./schema"
 
@@ -105,8 +108,7 @@ export default function BlogForm({
             type="submit"
             role="button"
             className={cn(
-              "group flex items-center gap-2 rounded-md border px-2 py-1.5 text-sm transition-all disabled:opacity-50",
-              { "animate-spin": isPending }
+              "group flex items-center gap-2 rounded-md border px-2 py-1.5 text-sm transition-all disabled:opacity-50"
             )}
             disabled={!form.formState.isValid}
           >
@@ -206,7 +208,7 @@ export default function BlogForm({
                         </div>
                       ) : (
                         <p className="text-gray-400">
-                          👆 click on preview to see image
+                          Klik menu preview untuk melihat gambar
                         </p>
                       )}
                     </div>
@@ -237,7 +239,7 @@ export default function BlogForm({
                     placeholder="Isi Blog"
                     {...field}
                     className={cn(
-                      "min-h-70vh resize-none border text-lg font-medium leading-relaxed focus:ring-1",
+                      "min-h-70vh resize-none border text-lg font-medium leading-relaxed text-black focus:ring-1",
                       isPreview ? "w-0 p-0" : "w-full lg:w-1/2"
                     )}
                   />
@@ -258,8 +260,10 @@ export default function BlogForm({
                 </div>
               </FormControl>
 
-              {form.getFieldState("content").invalid &&
-                form.getValues().content && <FormMessage />}
+              <div className="px-3">
+                {form.getFieldState("content").invalid &&
+                  form.getValues().content && <FormMessage />}
+              </div>
             </FormItem>
           )}
         />

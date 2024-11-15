@@ -1,4 +1,5 @@
 import React from "react"
+import Image from "next/image"
 
 import { Card, CardContent } from "./ui/card"
 
@@ -15,13 +16,14 @@ export default function CardBeritaArtikel({
 }: CardBeritaArtikelPropsType) {
   return (
     <Card
-      className="relative grid min-h-[30rem] items-end overflow-hidden rounded-xl border-none shadow-sm"
+      className="relative grid min-h-[24rem] w-[20rem] items-end overflow-hidden rounded-xl border-none shadow-sm md:min-h-[20rem] md:w-[26rem]"
       color="transparent"
     >
-      <img
+      <Image
         src={img}
         alt="bg"
         className="absolute inset-0 h-full w-full object-cover object-center"
+        layout="fill"
       />
 
       <div className="absolute inset-0 bg-black/70" />

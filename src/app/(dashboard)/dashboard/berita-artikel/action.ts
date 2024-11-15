@@ -1,8 +1,10 @@
 "use server"
+
 import { revalidatePath } from "next/cache"
+
+import { IBlog } from "@/types/blog"
 import db from "@/lib/db" // Assuming db.ts is located in utils directory
 import { BlogFormSchemaType } from "@/app/(dashboard)/dashboard/berita-artikel/schema"
-import { IBlog } from "@/types/blog"
 
 const DASHBOARD = "/dashboard/berita-artikel"
 
@@ -24,28 +26,36 @@ export async function createBlog(data: BlogFormSchemaType) {
     revalidatePath(DASHBOARD)
     return JSON.stringify({ success: true, id: blog.id })
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }
 
-export async function readBlog(): Promise<{ 
-  id: string;
-  createdAt: Date;
-  title: string;
-  image_url: string;
-  is_premium: boolean;
-  is_published: boolean;
-  blog_content: { content: string; createdAt: Date; blog_id: string }[];
-}[]> {
-try {
-  return await db.blog.findMany({
-    where: { is_published: true },
-    orderBy: { createdAt: "asc" },
-    include: { blog_content: true },
-  }) || [];
-} catch (error) {
-  console.error("Error fetching blogs:", error);
-  return [];
-}
+export async function readBlog(): Promise<
+  {
+    id: string
+    createdAt: Date
+    title: string
+    image_url: string
+    is_premium: boolean
+    is_published: boolean
+    blog_content: { content: string; createdAt: Date; blog_id: string }[]
+  }[]
+> {
+  try {
+    return (
+      (await db.blog.findMany({
+        where: { is_published: true },
+        orderBy: { createdAt: "asc" },
+        include: { blog_content: true },
+      })) || []
+    )
+  } catch (error) {
+    console.error("Error fetching blogs:", error)
+    return []
+  }
 }
 
 export async function readBlogAdmin() {
@@ -55,7 +65,11 @@ export async function readBlogAdmin() {
       include: { blog_content: true },
     })
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }
 
 export async function readBlogById(blogId: string) {
@@ -65,7 +79,11 @@ export async function readBlogById(blogId: string) {
       include: { blog_content: true },
     })
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }
 
 export async function readBlogIds() {
@@ -74,32 +92,36 @@ export async function readBlogIds() {
       select: { id: true },
     })
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }
 
-export async function readBlogDeatailById(blogId: string): Promise<{ 
-  id: string; 
-  createdAt: Date; 
-  title: string; 
-  image_url: string; 
-  is_premium: boolean; 
-  is_published: boolean; 
-  blog_content: { createdAt: Date; blog_id: string; content: string }[] 
+export async function readBlogDeatailById(blogId: string): Promise<{
+  id: string
+  createdAt: Date
+  title: string
+  image_url: string
+  is_premium: boolean
+  is_published: boolean
+  blog_content: { createdAt: Date; blog_id: string; content: string }[]
 } | null> {
-try {
-  const blog = await db.blog.findUnique({
-    where: { id: blogId },
-    include: { blog_content: true },
-  })
+  try {
+    const blog = await db.blog.findUnique({
+      where: { id: blogId },
+      include: { blog_content: true },
+    })
 
-  // If no blog is found, return null
-  if (!blog) return null;
+    // If no blog is found, return null
+    if (!blog) return null
 
-  return blog;
-} catch (error) {
-  console.error("Error reading blog details:", error);
-  return null;
-}
+    return blog
+  } catch (error) {
+    console.error("Error reading blog details:", error)
+    return null
+  }
 }
 
 export async function readBlogContent(blogId: string) {
@@ -110,7 +132,11 @@ export async function readBlogContent(blogId: string) {
     })
     return content
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }
 
 export async function updateBlogById(blogId: string, data: IBlog) {
@@ -124,10 +150,17 @@ export async function updateBlogById(blogId: string, data: IBlog) {
     revalidatePath("/blog/" + blogId)
     return JSON.stringify({ success: true, result })
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }
 
-export async function updateBlogDetail(blogId: string, data: BlogFormSchemaType) {
+export async function updateBlogDetail(
+  blogId: string,
+  data: BlogFormSchemaType
+) {
   try {
     const updatedBlog = await db.blog.update({
       where: { id: blogId },
@@ -148,7 +181,11 @@ export async function updateBlogDetail(blogId: string, data: BlogFormSchemaType)
     revalidatePath("/blog/" + blogId)
     return JSON.stringify({ success: true, updatedBlog })
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }
 
 export async function deleteBlogById(blogId: string) {
@@ -161,5 +198,9 @@ export async function deleteBlogById(blogId: string) {
     revalidatePath("/blog/" + blogId)
     return JSON.stringify({ success: true, result })
   } catch (error) {
-    return JSON.stringify({ success: false, error: (error as Error).message || "An unexpected error occurred" });  }
+    return JSON.stringify({
+      success: false,
+      error: (error as Error).message || "An unexpected error occurred",
+    })
+  }
 }

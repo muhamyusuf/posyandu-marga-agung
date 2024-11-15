@@ -49,6 +49,11 @@ const items = [
     icon: Newspaper,
   },
   {
+    title: "Atur Posting Artikel & Berita",
+    url: "/tabel-berita-artikel",
+    icon: Newspaper,
+  },
+  {
     title: "Atur Jadwal Posyandu",
     url: "/jadwal-posyandu",
     icon: Calendar,

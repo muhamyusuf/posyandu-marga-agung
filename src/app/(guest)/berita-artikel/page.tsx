@@ -1,24 +1,25 @@
 // src/app/(guest)/berita-artikel/page.tsx
 import Image from "next/image"
 import Link from "next/link"
-import { readBlog } from "@/app/(dashboard)/dashboard/berita-artikel/action"
+
 import CardBeritaArtikel from "@/components/CardBeritaArtikel"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
+import { readBlog } from "@/app/(dashboard)/dashboard/berita-artikel/action"
 
 type BlogType = {
-  id: string;
-  title: string;
-  image_url: string;
-  is_premium: boolean;
-  is_published: boolean;
-  createdAt: Date;
-  blog_content: { content: string; createdAt: Date; blog_id: string }[];
-};
+  id: string
+  title: string
+  image_url: string
+  is_premium: boolean
+  is_published: boolean
+  createdAt: Date
+  blog_content: { content: string; createdAt: Date; blog_id: string }[]
+}
 
 export default async function BeritaArtikelPage() {
   // Fetch published blog articles from the database
-  const articles: BlogType[] = await readBlog();
+  const articles: BlogType[] = await readBlog()
 
   return (
     <main className="container min-h-screen">
@@ -56,7 +57,7 @@ export default async function BeritaArtikelPage() {
       <section className="flex flex-col items-center justify-center py-20">
         <h2 className="text-2xl font-bold">List Berita & Artikel</h2>
 
-        <div className="mt-5 flex w-fit flex-wrap gap-2">
+        <div className="mx-auto mt-5 flex w-fit flex-wrap justify-center gap-2">
           {articles.map(({ id, title, image_url, blog_content }) => (
             <Link key={id} href={`/berita-artikel/${id}`}>
               <CardBeritaArtikel

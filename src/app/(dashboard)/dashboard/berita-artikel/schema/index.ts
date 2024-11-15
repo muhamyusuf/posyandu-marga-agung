@@ -3,13 +3,13 @@ import * as z from "zod"
 export const BlogFormSchema = z
   .object({
     title: z.string().min(10, {
-      message: "title is too short",
+      message: "Judul terlalu pendek",
     }),
     content: z.string().min(50, {
-      message: "Content is too short",
+      message: "Konten terlalu pendek",
     }),
     image_url: z.string().url({
-      message: "Invalid url",
+      message: "URL tidak valid",
     }),
     is_premium: z.boolean(),
     is_published: z.boolean(),
@@ -25,7 +25,7 @@ export const BlogFormSchema = z
       }
     },
     {
-      message: "Currently we are supporting only the image from unsplash",
+      message: "Saat ini kami hanya mendukung gambar dari Unsplash",
       path: ["image_url"],
     }
   )

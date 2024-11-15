@@ -1,7 +1,9 @@
 // src/app/(guest)/berita-artikel/[berita-artikel-id]/page.tsx
 import Image from "next/image"
+import Link from "next/link"
 import { notFound } from "next/navigation"
 
+import { buttonVariants } from "@/components/ui/button"
 import Footer from "@/components/footer"
 import Navbar from "@/components/navbar"
 import { readBlogDeatailById } from "@/app/(dashboard)/dashboard/berita-artikel/action"
@@ -67,6 +69,14 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       </section>
 
+      <div className="mx-auto flex items-center justify-center pb-10">
+        <Link
+          href={"/berita-artikel"}
+          className={buttonVariants({ size: "sm" })}
+        >
+          Kembali ke halaman berita
+        </Link>
+      </div>
       <Footer />
     </main>
   )
