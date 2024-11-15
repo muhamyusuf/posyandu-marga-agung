@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -18,29 +18,24 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { getLayananRemajaPutriData } from "./action" // Pastikan path ini benar
+
 // Define types for LayananRemajaPutri based on your Prisma schema
 type LayananRemajaPutri = {
   id: string
   ttd: boolean
   anemia: boolean
   hasilAnemia: boolean
-  createdAt: string // Assuming ISO string format for dates
+  createdAt: string
 }
-
-// Define mock data
-const mockData: LayananRemajaPutri[] = [
-  {
-    id: "1",
-    ttd: true,
-    anemia: false,
-    hasilAnemia: false,
-    createdAt: "2023-01-10T00:00:00Z",
-  },
-  // Add more mock rows as needed
-]
 
 // Define columns based on the LayananRemajaPutri model fields
 const columns: ColumnDef<LayananRemajaPutri>[] = [
+  {
+    accessorKey: "warga.nama", // Access `nama` from `warga` relation
+    header: "Nama",
+    cell: (info) => info.getValue() || "Tidak Tersedia",
+  },
   {
     accessorKey: "ttd",
     header: "Minum TTD",
@@ -64,12 +59,52 @@ const columns: ColumnDef<LayananRemajaPutri>[] = [
   },
 ]
 
-export default function TabelDataRematri() {
+type FilterProps = {
+  year?: number
+  month?: string
+}
+
+export default function TabelDataRematri({ year, month }: FilterProps) {
+  const [data, setData] = useState<LayananRemajaPutri[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true)
+      const layananData = await getLayananRemajaPutriData(year, month)
+      console.log("Layanan Remaja Putri Data:", layananData) // Cek data yang diterima
+      setData(
+        layananData.map((item) => ({
+          ...item,
+          createdAt: new Date(item.createdAt).toISOString(),
+        }))
+      )
+      setLoading(false)
+    }
+    fetchData()
+  }, [year, month])
+
   const table = useReactTable({
-    data: mockData,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (loading) {
+    return (
+      <div className="p-4">
+        <p>Loading data...</p>
+      </div>
+    )
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="p-4">
+        <p>No data available for the selected filters.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="overflow-x-auto">

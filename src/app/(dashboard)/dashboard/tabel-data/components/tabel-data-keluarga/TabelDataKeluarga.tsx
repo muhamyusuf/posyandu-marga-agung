@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -18,12 +18,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { getLayananKeluargaData } from "./action" // Pastikan path ini benar
+
 // Define types for LayananKeluarga based on your Prisma schema
 type LayananKeluarga = {
   id: string
   namaKepalaKeluarga: string
   dusun: string
-  namaIbuHamil: string
   anak_0_59_bulan: number
   kategoriKeluargaRentan: boolean
   kartuKeluarga: boolean
@@ -34,37 +35,26 @@ type LayananKeluarga = {
   aksesSanitasi: boolean
   pendampinganKeluarga: boolean
   ketahananPangan: boolean
-  createdAt: string // Assuming ISO string format for dates
+  createdAt: string
 }
-
-// Define mock data
-const mockData: LayananKeluarga[] = [
-  {
-    id: "1",
-    namaKepalaKeluarga: "Budi Santoso",
-    dusun: "Dusun Mekar Sari",
-    namaIbuHamil: "Siti Aminah",
-    anak_0_59_bulan: 2,
-    kategoriKeluargaRentan: true,
-    kartuKeluarga: true,
-    jambanSehat: true,
-    sumberAirBersih: true,
-    jaminanSosial: false,
-    jaminanKesehatan: true,
-    aksesSanitasi: true,
-    pendampinganKeluarga: false,
-    ketahananPangan: true,
-    createdAt: "2023-01-15T00:00:00Z",
-  },
-  // Add more mock rows as needed
-]
 
 // Define columns based on the LayananKeluarga model fields
 const columns: ColumnDef<LayananKeluarga>[] = [
-  { accessorKey: "namaKepalaKeluarga", header: "Nama Kepala Keluarga" },
-  { accessorKey: "dusun", header: "Dusun" },
-  { accessorKey: "namaIbuHamil", header: "Nama Ibu Hamil" },
-  { accessorKey: "anak_0_59_bulan", header: "Anak (0-59 Bulan)" },
+  {
+    accessorKey: "namaKepalaKeluarga",
+    header: "Nama Kepala Keluarga",
+    cell: (info) => info.getValue() || "Tidak Tersedia",
+  },
+  {
+    accessorKey: "dusun",
+    header: "Dusun",
+    cell: (info) => info.getValue() || "Tidak Tersedia",
+  },
+  {
+    accessorKey: "anak_0_59_bulan",
+    header: "Anak Usia 0-59 Bulan",
+    cell: (info) => info.getValue() || "Tidak Tersedia",
+  },
   {
     accessorKey: "kategoriKeluargaRentan",
     header: "Kategori Keluarga Rentan",
@@ -73,7 +63,7 @@ const columns: ColumnDef<LayananKeluarga>[] = [
   {
     accessorKey: "kartuKeluarga",
     header: "Kartu Keluarga",
-    cell: (info) => (info.getValue() ? "Ya" : "Tidak"),
+    cell: (info) => (info.getValue() ? "Ada" : "Tidak Ada"),
   },
   {
     accessorKey: "jambanSehat",
@@ -88,12 +78,12 @@ const columns: ColumnDef<LayananKeluarga>[] = [
   {
     accessorKey: "jaminanSosial",
     header: "Jaminan Sosial",
-    cell: (info) => (info.getValue() ? "Ya" : "Tidak"),
+    cell: (info) => (info.getValue() ? "Ada" : "Tidak Ada"),
   },
   {
     accessorKey: "jaminanKesehatan",
     header: "Jaminan Kesehatan",
-    cell: (info) => (info.getValue() ? "Ya" : "Tidak"),
+    cell: (info) => (info.getValue() ? "Ada" : "Tidak Ada"),
   },
   {
     accessorKey: "aksesSanitasi",
@@ -118,12 +108,52 @@ const columns: ColumnDef<LayananKeluarga>[] = [
   },
 ]
 
-export default function TabelDataKeluarga() {
+type FilterProps = {
+  year?: number
+  month?: string
+}
+
+export default function TabelDataLayananKeluarga({ year, month }: FilterProps) {
+  const [data, setData] = useState<LayananKeluarga[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true)
+      const layananData = await getLayananKeluargaData(year, month)
+      console.log("Layanan Keluarga Data:", layananData) // Cek data yang diterima
+      setData(
+        layananData.map((item) => ({
+          ...item,
+          createdAt: new Date(item.createdAt).toISOString(),
+        }))
+      )
+      setLoading(false)
+    }
+    fetchData()
+  }, [year, month])
+
   const table = useReactTable({
-    data: mockData,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (loading) {
+    return (
+      <div className="p-4">
+        <p>Loading data...</p>
+      </div>
+    )
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="p-4">
+        <p>No data available for the selected filters.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="overflow-x-auto">

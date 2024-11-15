@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -18,10 +18,11 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-// Define types for LayananIbuHamil based on your Prisma schema
+import { getLayananIbuHamilData } from "./action" // Pastikan path ini benar
+
 type LayananIbuHamil = {
   id: string
-  hariPertamaHaid: string // Assuming ISO string format for dates
+  hariPertamaHaid: string
   tanggalPerkiraanLahir: string
   umurKehamilan: number
   periksaKehamilan: string
@@ -33,26 +34,12 @@ type LayananIbuHamil = {
   createdAt: string
 }
 
-// Define mock data
-const mockData: LayananIbuHamil[] = [
-  {
-    id: "1",
-    hariPertamaHaid: "2023-01-01T00:00:00Z",
-    tanggalPerkiraanLahir: "2023-10-01T00:00:00Z",
-    umurKehamilan: 32,
-    periksaKehamilan: "Lengkap",
-    statusGizi: true,
-    statusPeriksaLengkap: true,
-    minumTtd: true,
-    kpPascaBersalin: false,
-    tambahanGizi: true,
-    createdAt: "2023-01-01T00:00:00Z",
-  },
-  // Add more mock rows as needed
-]
-
-// Define columns based on the LayananIbuHamil model fields
 const columns: ColumnDef<LayananIbuHamil>[] = [
+  {
+    accessorKey: "warga.nama",
+    header: "Nama",
+    cell: (info) => info.getValue() || "Tidak Tersedia",
+  },
   {
     accessorKey: "hariPertamaHaid",
     header: "Hari Pertama Haid",
@@ -106,12 +93,54 @@ const columns: ColumnDef<LayananIbuHamil>[] = [
   },
 ]
 
-export default function TabelDataBumil() {
+type FilterProps = {
+  year?: number
+  month?: string
+}
+
+export default function TabelDataBumil({ year, month }: FilterProps) {
+  const [data, setData] = useState<LayananIbuHamil[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true)
+      const layananData = await getLayananIbuHamilData(year, month) // Panggil action server untuk data layanan ibu hamil
+      console.log("Layanan Ibu Hamil Data:", layananData) // Cek data yang diterima
+      setData(
+        layananData.map((item) => ({
+          ...item,
+          hariPertamaHaid: item.hariPertamaHaid.toISOString(),
+          tanggalPerkiraanLahir: item.tanggalPerkiraanLahir.toISOString(),
+          createdAt: item.createdAt.toISOString(),
+        }))
+      )
+      setLoading(false)
+    }
+    fetchData()
+  }, [year, month])
+
   const table = useReactTable({
-    data: mockData,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (loading) {
+    return (
+      <div className="p-4">
+        <p>Loading data...</p>
+      </div>
+    )
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="p-4">
+        <p>No data available for the selected filters.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="overflow-x-auto">

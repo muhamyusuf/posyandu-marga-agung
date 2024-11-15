@@ -2,6 +2,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
+
 import {
   Select,
   SelectContent,
@@ -18,8 +19,34 @@ import TabelDataLansia from "./components/tabel-data-lansia/TabelDataLansia"
 import TabelDataRematri from "./components/tabel-data-rematri/TabelDataRematri"
 
 const monthsByYear: { [key: number]: string[] } = {
-  2023: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
-  2024: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
+  2023: [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ],
+  2024: [
+    "Januari",
+    "Februari",
+    "Maret",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Agustus",
+    "September",
+    "Oktober",
+    "November",
+    "Desember",
+  ],
 }
 
 function Skeleton() {
@@ -64,23 +91,54 @@ export default function TableDataPage() {
     localStorage.setItem("bulan", month)
   }
 
-const renderSelectedTable = () => {
+  const renderSelectedTable = () => {
     switch (selectedLayanan) {
-      // case "keluarga":
-      //   return <TabelDataKeluarga year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
-      // case "remaja_putri":
-      //   return <TabelDataRematri year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
-      // case "ibu_hamil":
-      //   return <TabelDataBumil year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
-      // case "calon_pengantin":
-      //   return <TabelDataCatin year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
-      // case "anak":
-      //   return <TabelDataAnak year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+      case "keluarga":
+        return (
+          <TabelDataKeluarga
+            year={selectedYear ?? undefined}
+            month={selectedMonth ?? undefined}
+          />
+        )
+      case "remaja_putri":
+        return (
+          <TabelDataRematri
+            year={selectedYear ?? undefined}
+            month={selectedMonth ?? undefined}
+          />
+        )
+      case "ibu_hamil":
+        return (
+          <TabelDataBumil
+            year={selectedYear ?? undefined}
+            month={selectedMonth ?? undefined}
+          />
+        )
+      case "calon_pengantin":
+        return (
+          <TabelDataCatin
+            year={selectedYear ?? undefined}
+            month={selectedMonth ?? undefined}
+          />
+        )
+      case "anak":
+        return (
+          <TabelDataAnak
+            year={selectedYear ?? undefined}
+            month={selectedMonth ?? undefined}
+          />
+        )
       case "lansia":
-        return <TabelDataLansia year={selectedYear ?? undefined} month={selectedMonth ?? undefined} />
+        return (
+          <TabelDataLansia
+            year={selectedYear ?? undefined}
+            month={selectedMonth ?? undefined}
+          />
+        )
       default:
         return null
-    }  }
+    }
+  }
 
   return (
     <main className="min-h-screen w-full">
@@ -96,7 +154,9 @@ const renderSelectedTable = () => {
             <SelectItem value="keluarga">Layanan Keluarga</SelectItem>
             <SelectItem value="remaja_putri">Layanan Remaja Putri</SelectItem>
             <SelectItem value="ibu_hamil">Layanan Ibu Hamil</SelectItem>
-            <SelectItem value="calon_pengantin">Layanan Calon Pengantin</SelectItem>
+            <SelectItem value="calon_pengantin">
+              Layanan Calon Pengantin
+            </SelectItem>
             <SelectItem value="anak">Layanan Anak</SelectItem>
             <SelectItem value="lansia">Layanan Lansia</SelectItem>
           </SelectContent>
@@ -105,13 +165,18 @@ const renderSelectedTable = () => {
 
       <div className="mb-4">
         <label className="mb-1 block text-sm font-semibold">Pilih Tahun</label>
-        <Select onValueChange={handleYearChange} value={selectedYear ? selectedYear.toString() : ""}>
+        <Select
+          onValueChange={handleYearChange}
+          value={selectedYear ? selectedYear.toString() : ""}
+        >
           <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
             <SelectValue placeholder="Pilih Tahun" />
           </SelectTrigger>
           <SelectContent>
             {Object.keys(monthsByYear).map((year) => (
-              <SelectItem key={year} value={year}>{year}</SelectItem>
+              <SelectItem key={year} value={year}>
+                {year}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -119,14 +184,18 @@ const renderSelectedTable = () => {
 
       {selectedYear && (
         <div className="mb-4">
-          <label className="mb-1 block text-sm font-semibold">Pilih Bulan</label>
+          <label className="mb-1 block text-sm font-semibold">
+            Pilih Bulan
+          </label>
           <Select onValueChange={handleMonthChange} value={selectedMonth || ""}>
             <SelectTrigger className="w-full min-w-[300px] max-w-[400px] rounded-md border px-4 py-2">
               <SelectValue placeholder="Pilih Bulan" />
             </SelectTrigger>
             <SelectContent>
               {monthsByYear[selectedYear]?.map((month) => (
-                <SelectItem key={month} value={month}>{month}</SelectItem>
+                <SelectItem key={month} value={month}>
+                  {month}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>

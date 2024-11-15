@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
   ColumnDef,
   flexRender,
@@ -18,29 +18,22 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-// Define types for LayananCalonPengantin based on your Prisma schema
+import { getLayananCalonPengantinData } from "./action" // Update the path accordingly
+
 type LayananCalonPengantin = {
   id: string
-  tanggalPernikahan: string // Assuming ISO string format
+  tanggalPernikahan: string
   periksaKesehatan: boolean
   bimbinganPerkawinan: boolean
   createdAt: string
 }
 
-// Define mock data
-const mockData: LayananCalonPengantin[] = [
-  {
-    id: "1",
-    tanggalPernikahan: "2023-05-20T00:00:00Z",
-    periksaKesehatan: true,
-    bimbinganPerkawinan: true,
-    createdAt: "2023-01-15T00:00:00Z",
-  },
-  // Add more mock rows as needed
-]
-
-// Define columns based on the LayananCalonPengantin model fields
 const columns: ColumnDef<LayananCalonPengantin>[] = [
+  {
+    accessorKey: "warga.nama",
+    header: "Nama",
+    cell: (info) => info.getValue() || "Tidak Tersedia",
+  },
   {
     accessorKey: "tanggalPernikahan",
     header: "Tanggal Pernikahan",
@@ -65,12 +58,53 @@ const columns: ColumnDef<LayananCalonPengantin>[] = [
   },
 ]
 
-export default function TabelDataCatin() {
+type FilterProps = {
+  year?: number
+  month?: string
+}
+
+export default function TabelDataCatin({ year, month }: FilterProps) {
+  const [data, setData] = useState<LayananCalonPengantin[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true)
+      const layananData = await getLayananCalonPengantinData(year, month)
+      console.log("Layanan Calon Pengantin Data:", layananData)
+      setData(
+        layananData.map((item) => ({
+          ...item,
+          tanggalPernikahan: item.tanggalPernikahan,
+          createdAt: item.createdAt,
+        }))
+      )
+      setLoading(false)
+    }
+    fetchData()
+  }, [year, month])
+
   const table = useReactTable({
-    data: mockData,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  if (loading) {
+    return (
+      <div className="p-4">
+        <p>Loading data...</p>
+      </div>
+    )
+  }
+
+  if (data.length === 0) {
+    return (
+      <div className="p-4">
+        <p>No data available for the selected filters.</p>
+      </div>
+    )
+  }
 
   return (
     <div className="overflow-x-auto">
