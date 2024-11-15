@@ -4,11 +4,10 @@ import rehypeHighlight from "rehype-highlight"
 import remarkGfm from "remark-gfm" // Tambahkan plugin ini untuk dukungan tabel
 
 import CopyButton from "./CopyButton"
-import { icons } from "./icon"
 
 import "highlight.js/styles/atom-one-dark.min.css"
 
-import { PiTerminalThin } from "react-icons/pi"
+import { Terminal } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -102,17 +101,13 @@ export default function MarkdownPreview({
           const match = /language-(\w+)/.exec(className || "")
           const id = (Math.floor(Math.random() * 100) + 1).toString()
           if (match?.length) {
-            let Icon = PiTerminalThin
-            const isMatch = icons.hasOwnProperty(match[1])
-            if (isMatch) {
-              Icon = icons[match[1] as keyof typeof icons]
-            }
+            let Icon = <Terminal />
 
             return (
               <div className="rounded-md border-[0.5px] border-zinc-500 bg-gradient-to-r from-zinc-800 to-zinc-700 text-gray-300">
                 <div className="flex items-center justify-between border-b-[0.5px] border-zinc-500 px-5 py-2">
                   <div className="flex items-center gap-2">
-                    <Icon />
+                    <Terminal />
                     <p className="text-sm text-gray-400">
                       {/* @ts-ignore */}
                       {node?.data?.meta}

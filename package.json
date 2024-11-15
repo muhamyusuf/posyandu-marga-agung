@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "format": "bun prettier ./src --write",
-    "format:check": "bun prettier ./src --check"
+    "format:check": "bun prettier ./src --check",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@faker-js/faker": "^9.2.0",
