@@ -122,6 +122,7 @@ export default function JadwalPosyanduPage() {
                           className="w-full justify-start text-left font-normal"
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
+                          {/* @ts-ignore */}
                           {field.value
                             ? format(field.value, "PPP", { locale: localeID })
                             : "Pilih Tanggal"}
