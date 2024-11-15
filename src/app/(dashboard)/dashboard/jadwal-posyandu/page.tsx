@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
+import { formatDate } from "date-fns"
 import { id as localeID } from "date-fns/locale" // Import locale Indonesia
 import { Calendar as CalendarIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
@@ -124,7 +124,9 @@ export default function JadwalPosyanduPage() {
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {/* @ts-ignore */}
                           {field.value
-                            ? format(field.value, "PPP", { locale: localeID })
+                            ? formatDate(field.value, "PPP", {
+                                locale: localeID,
+                              })
                             : "Pilih Tanggal"}
                         </Button>
                       </PopoverTrigger>
