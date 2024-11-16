@@ -77,19 +77,25 @@ model LayananIbuHamil {
 }
 
 model LayananAnak {
-  id                 String       @id @default(uuid())
-  wargaId            String
-  warga              Warga        @relation(fields: [wargaId], references: [id])
-  jenisKelamin       JenisKelamin
-  namaOrangTua       String
-  statusGiziKurang   Boolean
-  statusGiziBuruk    Boolean
-  stunting           Boolean
-  imunisasiHbO       Boolean
-  imunisasiBcgPolio1 Boolean
-  statusKelengkapan  Boolean
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
+  id                                 String       @id @default(uuid())
+  wargaId                            String
+  warga                              Warga        @relation(fields: [wargaId], references: [id])
+  jenisKelamin                       JenisKelamin
+  namaOrangTua                       String
+  statusGiziKurang                   Boolean
+  statusGiziBuruk                    Boolean
+  stunting                           Boolean
+  pemantauanTumbuhKembangSetiapBulan Boolean
+  ikutBKBPAUDSetiapBulan             Boolean
+  mendapatkanTambahanGizi            Boolean
+  imunisasiHbO                       Boolean
+  imunisasiBcgPolio1                 Boolean
+  DPTHBHlb1Polio2                    Boolean
+  DPTHBHlb2Polio3                    Boolean
+  campak                             Boolean
+  statusKelengkapan                  Boolean
+  createdAt                          DateTime     @default(now())
+  updatedAt                          DateTime     @updatedAt
 }
 
 model LayananKeluarga {
