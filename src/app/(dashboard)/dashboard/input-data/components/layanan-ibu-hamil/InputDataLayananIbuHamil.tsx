@@ -23,6 +23,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -266,7 +273,7 @@ export default function InputDataLayananIbuHamil() {
         />
 
         {/* Periksa Kehamilan Field */}
-        <FormField
+        {/*<FormField
           control={form.control}
           name="periksaKehamilan"
           render={({ field, fieldState }) => (
@@ -278,6 +285,56 @@ export default function InputDataLayananIbuHamil() {
                   placeholder="Masukkan Periksa Kehamilan"
                   {...field}
                 />
+              </FormControl>
+              <FormMessage>{fieldState.error?.message}</FormMessage>
+            </FormItem>
+          )}
+        />*/}
+
+        <FormField
+          control={form.control}
+          name="periksaKehamilan"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <Label htmlFor="periksaKehamilan">Periksa Kehamilan</Label>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger id="periksaKehamilan" className="w-full">
+                    <SelectValue placeholder="Pilih Trimester dan Bulan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Trimester 1, Bulan 1">
+                      Trimester 1, Bulan 1
+                    </SelectItem>
+                    <SelectItem value="Trimester 1, Bulan 2">
+                      Trimester 1, Bulan 2
+                    </SelectItem>
+                    <SelectItem value="Trimester 1, Bulan 3">
+                      Trimester 1, Bulan 3
+                    </SelectItem>
+                    <SelectItem value="Trimester 2, Bulan 4">
+                      Trimester 2, Bulan 4
+                    </SelectItem>
+                    <SelectItem value="Trimester 2, Bulan 5">
+                      Trimester 2, Bulan 5
+                    </SelectItem>
+                    <SelectItem value="Trimester 2, Bulan 6">
+                      Trimester 2, Bulan 6
+                    </SelectItem>
+                    <SelectItem value="Trimester 3, Bulan 7">
+                      Trimester 3, Bulan 7
+                    </SelectItem>
+                    <SelectItem value="Trimester 3, Bulan 8">
+                      Trimester 3, Bulan 8
+                    </SelectItem>
+                    <SelectItem value="Trimester 3, Bulan 9">
+                      Trimester 3, Bulan 9
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage>{fieldState.error?.message}</FormMessage>
             </FormItem>
