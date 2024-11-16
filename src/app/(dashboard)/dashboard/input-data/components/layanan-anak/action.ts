@@ -1,7 +1,8 @@
 "use server"
 
-import db from "@/lib/db"
 import { revalidatePath } from "next/cache"
+
+import db from "@/lib/db"
 
 export async function saveDataLayananAnak(data: {
   wargaId: string
@@ -39,8 +40,15 @@ export async function saveDataLayananAnak(data: {
         statusGiziKurang: data.statusGiziKurang,
         statusGiziBuruk: data.statusGiziBuruk,
         stunting: data.stunting,
+        pemantauanTumbuhKembangSetiapBulan:
+          data.pemantauanTumbuhKembangSetiapBulan,
+        ikutBKBPAUDSetiapBulan: data.ikutBKBPAUDSetiapBulan,
+        mendapatkanTambahanGizi: data.mendapatkanTambahanGizi,
         imunisasiHbO: data.imunisasiHbO,
         imunisasiBcgPolio1: data.imunisasiBcgPolio1,
+        DPTHBHlb1Polio2: data.DPTHBHlb1Polio2,
+        DPTHBHlb2Polio3: data.DPTHBHlb2Polio3,
+        campak: data.campak,
         statusKelengkapan: data.statusKelengkapan,
       },
     })
