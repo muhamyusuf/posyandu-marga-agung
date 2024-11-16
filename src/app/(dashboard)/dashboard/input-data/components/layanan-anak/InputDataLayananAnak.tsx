@@ -1,16 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
-import { cn } from "@/lib/utils"
-import { toast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Check, ChevronsUpDown } from "lucide-react"
 import {
   Command,
   CommandEmpty,
@@ -26,8 +18,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
@@ -41,7 +31,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 import { saveDataLayananAnak } from "./action"
+import { toast } from "@/hooks/use-toast"
+import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 // Define the validation schema with Zod
 const layananAnakSchema = z.object({
@@ -53,8 +53,14 @@ const layananAnakSchema = z.object({
   statusGiziKurang: z.boolean(),
   statusGiziBuruk: z.boolean(),
   stunting: z.boolean(),
+  pemantauanTumbuhKembangSetiapBulan: z.boolean(),
+  ikutBKBPAUDSetiapBulan: z.boolean(),
+  mendapatkanTambahanGizi: z.boolean(),
   imunisasiHbO: z.boolean(),
   imunisasiBcgPolio1: z.boolean(),
+  DPTHBHlb1Polio2: z.boolean(),
+  DPTHBHlb2Polio3: z.boolean(),
+  campak: z.boolean(),
   statusKelengkapan: z.boolean(),
 })
 
@@ -71,8 +77,14 @@ export default function InputDataLayananAnak() {
       statusGiziKurang: false,
       statusGiziBuruk: false,
       stunting: false,
+      pemantauanTumbuhKembangSetiapBulan: false,
+      ikutBKBPAUDSetiapBulan: false,
+      mendapatkanTambahanGizi: false,
       imunisasiHbO: false,
       imunisasiBcgPolio1: false,
+      DPTHBHlb1Polio2: false,
+      DPTHBHlb2Polio3: false,
+      campak: false,
       statusKelengkapan: false,
     },
   })
@@ -258,8 +270,23 @@ export default function InputDataLayananAnak() {
             { name: "statusGiziKurang", label: "Status Gizi Kurang" },
             { name: "statusGiziBuruk", label: "Status Gizi Buruk" },
             { name: "stunting", label: "Stunting" },
+            {
+              name: "pemantauanTumbuhKembangSetiapBulan",
+              label: "Pemantauan Tumbuh Kembang Setiap Bulan",
+            },
+            {
+              name: "ikutBKBPAUDSetiapBulan",
+              label: "Ikut BKB/PAUD Setiap Bulan",
+            },
+            {
+              name: "mendapatkanTambahanGizi",
+              label: "Mendapatkan Tambahan Gizi",
+            },
             { name: "imunisasiHbO", label: "Imunisasi HbO" },
             { name: "imunisasiBcgPolio1", label: "Imunisasi Bcg Polio1" },
+            { name: "DPTHBHlb1Polio2", label: "DPT-HB-Hlb1 & Polio2" },
+            { name: "DPTHBHlb2Polio3", label: "DPT-HB-Hlb1 & Polio2" },
+            { name: "campak", label: "Campak" },
             { name: "statusKelengkapan", label: "Status Kelengkapan" },
           ].map(({ name, label }) => (
             <FormField

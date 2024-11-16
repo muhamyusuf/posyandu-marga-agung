@@ -1,8 +1,7 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-
 import db from "@/lib/db"
+import { revalidatePath } from "next/cache"
 
 export async function saveDataLayananAnak(data: {
   wargaId: string
@@ -11,8 +10,14 @@ export async function saveDataLayananAnak(data: {
   statusGiziKurang: boolean
   statusGiziBuruk: boolean
   stunting: boolean
+  pemantauanTumbuhKembangSetiapBulan: boolean
+  ikutBKBPAUDSetiapBulan: boolean
+  mendapatkanTambahanGizi: boolean
   imunisasiHbO: boolean
   imunisasiBcgPolio1: boolean
+  DPTHBHlb1Polio2: boolean
+  DPTHBHlb2Polio3: boolean
+  campak: boolean
   statusKelengkapan: boolean
 }) {
   try {

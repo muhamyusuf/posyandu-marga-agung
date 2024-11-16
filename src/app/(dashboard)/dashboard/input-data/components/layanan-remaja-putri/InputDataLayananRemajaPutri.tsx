@@ -1,15 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { useForm } from "react-hook-form"
 import * as z from "zod"
 
-import { cn } from "@/lib/utils"
-import { toast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Check, ChevronsUpDown } from "lucide-react"
 import {
   Command,
   CommandEmpty,
@@ -25,14 +19,20 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { Label } from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 import { saveDataLayananRemajaPutri } from "./action"
+import { toast } from "@/hooks/use-toast"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const layananRemajaPutriSchema = z.object({
   wargaId: z.string().min(1, { message: "Warga ID wajib diisi" }),
@@ -227,7 +227,7 @@ export default function InputDataLayananRemajaPutri({
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                    <Label htmlFor="anemia">Anemia</Label>
+                    <Label htmlFor="anemia">Periksa Anemia</Label>
                   </div>
                 </FormControl>
                 <FormMessage>{fieldState.error?.message}</FormMessage>
@@ -248,7 +248,7 @@ export default function InputDataLayananRemajaPutri({
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
-                    <Label htmlFor="hasilAnemia">Hasil Anemia</Label>
+                    <Label htmlFor="hasilAnemia">Hasil Periksa Anemia</Label>
                   </div>
                 </FormControl>
                 <FormMessage>{fieldState.error?.message}</FormMessage>

@@ -1,16 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
-import { cn } from "@/lib/utils"
-import { toast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Check, ChevronsUpDown } from "lucide-react"
 import {
   Command,
   CommandEmpty,
@@ -26,15 +18,23 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 import { saveDataLayananIbuHamil } from "./action"
+import { toast } from "@/hooks/use-toast"
+import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 // Define the validation schema with Zod
 const layananIbuHamilSchema = z.object({
@@ -215,7 +215,7 @@ export default function InputDataLayananIbuHamil() {
           name="hariPertamaHaid"
           render={({ field, fieldState }) => (
             <FormItem>
-              <Label htmlFor="hariPertamaHaid">Hari Pertama Haid</Label>
+              <Label htmlFor="hariPertamaHaid">Hari Terakhir Haid</Label>
               <FormControl>
                 <Input id="hariPertamaHaid" type="date" {...field} />
               </FormControl>
@@ -247,7 +247,9 @@ export default function InputDataLayananIbuHamil() {
           name="umurKehamilan"
           render={({ field, fieldState }) => (
             <FormItem>
-              <Label htmlFor="umurKehamilan">Umur Kehamilan</Label>
+              <Label htmlFor="umurKehamilan">
+                Umur Kehamilan (dalam minggu)
+              </Label>
               <FormControl>
                 <Input
                   id="umurKehamilan"

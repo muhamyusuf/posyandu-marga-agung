@@ -1,15 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
 
-import { cn } from "@/lib/utils"
-import { toast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
+import { Check, ChevronsUpDown } from "lucide-react"
 import {
   Command,
   CommandEmpty,
@@ -25,15 +18,22 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 import { saveDataLayananLansia } from "./action"
+import { toast } from "@/hooks/use-toast"
+import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation"
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 const layananLansiaSchema = z.object({
   wargaId: z.string().min(1, { message: "Warga ID wajib diisi" }),
@@ -237,7 +237,7 @@ export default function InputDataLayananLansia() {
           name="beratBadan"
           render={({ field, fieldState }) => (
             <FormItem>
-              <Label htmlFor="beratBadan">Berat Badan</Label>
+              <Label htmlFor="beratBadan">Berat Badan (Kg)</Label>
               <FormControl>
                 <Input
                   id="beratBadan"
@@ -257,7 +257,7 @@ export default function InputDataLayananLansia() {
           name="tinggiBadan"
           render={({ field, fieldState }) => (
             <FormItem>
-              <Label htmlFor="tinggiBadan">Tinggi Badan</Label>
+              <Label htmlFor="tinggiBadan">Tinggi Badan (cm)</Label>
               <FormControl>
                 <Input
                   id="tinggiBadan"
@@ -277,7 +277,7 @@ export default function InputDataLayananLansia() {
           name="lingkarPinggang"
           render={({ field, fieldState }) => (
             <FormItem>
-              <Label htmlFor="lingkarPinggang">Lingkar Pinggang</Label>
+              <Label htmlFor="lingkarPinggang">Lingkar Pinggang (cm)</Label>
               <FormControl>
                 <Input
                   id="lingkarPinggang"
@@ -297,7 +297,7 @@ export default function InputDataLayananLansia() {
           name="tekananDarah"
           render={({ field, fieldState }) => (
             <FormItem>
-              <Label htmlFor="tekananDarah">Tekanan Darah</Label>
+              <Label htmlFor="tekananDarah">Tekanan Darah (mmHg)</Label>
               <FormControl>
                 <Input
                   id="tekananDarah"
