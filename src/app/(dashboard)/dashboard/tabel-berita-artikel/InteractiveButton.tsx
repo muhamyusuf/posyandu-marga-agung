@@ -24,7 +24,7 @@ export default function InteractiveButton({
       if (response.success) {
         toast({
           title: "Berhasil",
-          description: `Post ID ${response.id} berhasil diubah menjadi ${
+          description: `Post berhasil diubah menjadi ${
             response.is_published ? "Terposting" : "Tidak Terposting"
           }`,
         })
