@@ -53,7 +53,8 @@ const layananIbuHamilSchema = z.object({
   periksaKehamilan: z
     .string()
     .min(1, { message: "Periksa Kehamilan wajib diisi" }),
-  statusGizi: z.boolean(),
+  statusGiziKEK: z.boolean(),
+  statusGiziRisti: z.boolean(),
   statusPeriksaLengkap: z.boolean(),
   minumTtd: z.boolean(),
   kpPascaBersalin: z.boolean(),
@@ -71,7 +72,8 @@ export default function InputDataLayananIbuHamil() {
       tanggalPerkiraanLahir: "",
       umurKehamilan: undefined,
       periksaKehamilan: "",
-      statusGizi: false,
+      statusGiziKEK: false,
+      statusGiziRisti: false,
       statusPeriksaLengkap: false,
       minumTtd: false,
       kpPascaBersalin: false,
@@ -285,7 +287,8 @@ export default function InputDataLayananIbuHamil() {
         {/* Boolean Fields with Checkboxes */}
         <div className="mt-5 space-y-2">
           {[
-            { name: "statusGizi", label: "Status Gizi" },
+            { name: "statusGiziKEK", label: "Status Gizi KEK" },
+            { name: "statusGiziRisti", label: "Status Gizi Risti" },
             { name: "statusPeriksaLengkap", label: "Status Periksa Lengkap" },
             { name: "minumTtd", label: "Minum TTD" },
             { name: "kpPascaBersalin", label: "KP Pasca Bersalin" },

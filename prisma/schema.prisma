@@ -67,7 +67,8 @@ model LayananIbuHamil {
   tanggalPerkiraanLahir DateTime
   umurKehamilan         Int
   periksaKehamilan      String
-  statusGizi            Boolean
+  statusGiziKEK         Boolean
+  statusGiziRisti       Boolean
   statusPeriksaLengkap  Boolean
   minumTtd              Boolean
   kpPascaBersalin       Boolean
