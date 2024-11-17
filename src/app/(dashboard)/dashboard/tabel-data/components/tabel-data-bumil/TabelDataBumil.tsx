@@ -18,15 +18,17 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { getLayananIbuHamilData } from "./action" // Pastikan path ini benar
+import { getLayananIbuHamilData } from "./action"
 
 type LayananIbuHamil = {
   id: string
+  wargaId: string
   hariPertamaHaid: string
   tanggalPerkiraanLahir: string
   umurKehamilan: number
   periksaKehamilan: string
-  statusGizi: boolean
+  statusGiziKEK: boolean
+  statusGiziRisti: boolean
   statusPeriksaLengkap: boolean
   minumTtd: boolean
   kpPascaBersalin: boolean
@@ -61,9 +63,14 @@ const columns: ColumnDef<LayananIbuHamil>[] = [
     header: "Status Periksa Kehamilan",
   },
   {
-    accessorKey: "statusGizi",
-    header: "Status Gizi",
-    cell: (info) => (info.getValue() ? "Baik" : "Buruk"),
+    accessorKey: "statusGiziKEK",
+    header: "Status Gizi KEK",
+    cell: (info) => (info.getValue() ? "Ya" : "Tidak"),
+  },
+  {
+    accessorKey: "statusGiziRisti",
+    header: "Status Gizi Risti",
+    cell: (info) => (info.getValue() ? "Ya" : "Tidak"),
   },
   {
     accessorKey: "statusPeriksaLengkap",
@@ -105,8 +112,7 @@ export default function TabelDataBumil({ year, month }: FilterProps) {
   useEffect(() => {
     async function fetchData() {
       setLoading(true)
-      const layananData = await getLayananIbuHamilData(year, month) // Panggil action server untuk data layanan ibu hamil
-      console.log("Layanan Ibu Hamil Data:", layananData) // Cek data yang diterima
+      const layananData = await getLayananIbuHamilData(year, month)
       setData(
         layananData.map((item) => ({
           ...item,
@@ -145,14 +151,14 @@ export default function TabelDataBumil({ year, month }: FilterProps) {
   return (
     <div className="overflow-x-auto">
       <ScrollArea className="max-w-[320px] overflow-hidden rounded-md border sm:max-w-[600px] md:max-w-[700px] lg:max-w-[900px] xl:max-w-[1280px]">
-        <Table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-md">
+        <Table className="min-w-full overflow-hidden divide-y divide-gray-200 rounded-md">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                    className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase"
                   >
                     {header.isPlaceholder
                       ? null

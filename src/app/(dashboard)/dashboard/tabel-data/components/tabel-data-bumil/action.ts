@@ -4,11 +4,13 @@ import db from "@/lib/db"
 
 export type LayananIbuHamil = {
   id: string
+  wargaId: string
   hariPertamaHaid: Date
   tanggalPerkiraanLahir: Date
   umurKehamilan: number
   periksaKehamilan: string
-  statusGizi: boolean
+  statusGiziKEK: boolean
+  statusGiziRisti: boolean
   statusPeriksaLengkap: boolean
   minumTtd: boolean
   kpPascaBersalin: boolean
@@ -45,13 +47,17 @@ export async function getLayananIbuHamilData(
       include: {
         warga: {
           select: {
-            nama: true, // Ambil nama dari `warga`
+            nama: true,
           },
         },
       },
     })
 
-    return layananIbuHamilData || []
+    return layananIbuHamilData.map((item) => ({
+      ...item,
+      statusGiziKEK: item.statusGiziKEK ?? false,
+      statusGiziRisti: item.statusGiziRisti ?? false,
+    }))
   } catch (error) {
     console.error("Error fetching Layanan Ibu Hamil data:", error)
     return []

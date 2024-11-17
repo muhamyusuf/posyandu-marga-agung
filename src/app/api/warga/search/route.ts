@@ -24,7 +24,6 @@ export async function GET(req: NextRequest) {
       orderBy: {
         nama: "asc",
       },
-      take: 10, // Limit results for performance
     })
 
     return NextResponse.json(wargaData)
