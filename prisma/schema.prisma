@@ -9,115 +9,56 @@ datasource db {
 }
 
 model Warga {
-  id                    String                  @id @default(uuid())
-  nama                  String
-  nik                   String                  @unique
-  tanggalLahir          DateTime
-  umur                  Int
-  layananLansia         LayananLansia[]
-  layananCalonPengantin LayananCalonPengantin[]
-  layananRemajaPutri    LayananRemajaPutri[]
-  layananIbuHamil       LayananIbuHamil[]
-  layananAnak           LayananAnak[]
-  layananKeluarga       LayananKeluarga[]
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime                @updatedAt
+  id             String           @id @default(uuid())
+  nama           String
+  nik            String           @unique
+  tanggalLahir   DateTime
+  umur           Int
+  layananLansia  LayananLansia[]
+  LayananIbuAnak LayananIbuAnak[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
 }
 
 model LayananLansia {
-  id              String   @id @default(uuid())
-  wargaId         String
-  warga           Warga    @relation(fields: [wargaId], references: [id])
-  gds             Int
-  beratBadan      Float
-  tinggiBadan     Float
-  lingkarPinggang Float
-  tekananDarah    String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id           String   @id @default(uuid())
+  wargaId      String
+  warga        Warga    @relation(fields: [wargaId], references: [id])
+  nama         String
+  nik          String
+  ttl          String
+  beratBadan   Float
+  tinggiBadan  Float
+  tensiDarah   String
+  lingkarPerut Float
+  kolesterol   Float
+  gulaDarah    Float
+  asamUrat     Float
+  keterangan   String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
-model LayananCalonPengantin {
-  id                  String   @id @default(uuid())
-  wargaId             String
-  warga               Warga    @relation(fields: [wargaId], references: [id])
-  tanggalPernikahan   DateTime
-  periksaKesehatan    Boolean
-  bimbinganPerkawinan Boolean
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
-}
-
-model LayananRemajaPutri {
-  id          String   @id @default(uuid())
-  wargaId     String
-  warga       Warga    @relation(fields: [wargaId], references: [id])
-  ttd         Boolean
-  anemia      Boolean
-  hasilAnemia Boolean
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model LayananIbuHamil {
-  id                    String   @id @default(uuid())
-  wargaId               String
-  warga                 Warga    @relation(fields: [wargaId], references: [id])
-  hariPertamaHaid       DateTime
-  tanggalPerkiraanLahir DateTime
-  umurKehamilan         Int
-  periksaKehamilan      String
-  statusGiziKEK         Boolean
-  statusGiziRisti       Boolean
-  statusPeriksaLengkap  Boolean
-  minumTtd              Boolean
-  kpPascaBersalin       Boolean
-  tambahanGizi          Boolean
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-}
-
-model LayananAnak {
-  id                                 String       @id @default(uuid())
-  wargaId                            String
-  warga                              Warga        @relation(fields: [wargaId], references: [id])
-  jenisKelamin                       JenisKelamin
-  namaOrangTua                       String
-  statusGiziKurang                   Boolean
-  statusGiziBuruk                    Boolean
-  stunting                           Boolean
-  pemantauanTumbuhKembangSetiapBulan Boolean
-  ikutBKBPAUDSetiapBulan             Boolean
-  mendapatkanTambahanGizi            Boolean
-  imunisasiHbO                       Boolean
-  imunisasiBcgPolio1                 Boolean
-  DPTHBHlb1Polio2                    Boolean
-  DPTHBHlb2Polio3                    Boolean
-  campak                             Boolean
-  statusKelengkapan                  Boolean
-  createdAt                          DateTime     @default(now())
-  updatedAt                          DateTime     @updatedAt
-}
-
-model LayananKeluarga {
-  id                     String   @id @default(uuid())
-  wargaId                String
-  warga                  Warga    @relation(fields: [wargaId], references: [id])
-  namaKepalaKeluarga     String
-  dusun                  String
-  namaIbuHamil           String
-  anak_0_59_bulan        Int
-  kategoriKeluargaRentan Boolean
-  kartuKeluarga          Boolean
-  jambanSehat            Boolean
-  sumberAirBersih        Boolean
-  jaminanSosial          Boolean
-  jaminanKesehatan       Boolean
-  aksesSanitasi          Boolean
-  pendampinganKeluarga   Boolean
-  ketahananPangan        Boolean
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+model LayananIbuAnak {
+  id                 String       @id @default(uuid())
+  wargaId            String
+  warga              Warga        @relation(fields: [wargaId], references: [id])
+  jenisKelamin       JenisKelamin
+  namaIbu            String
+  namaAyah           String
+  namaAnak           String
+  tinggiBadanAnak    Float
+  beratBadanAnak     Float
+  umurAnak           Float
+  lingkarLenganAnak  Float
+  lingkarKepalaAnak  Float
+  tinggiBadanIbu     Float
+  beratBadanIbu      Float
+  lingkarLenganIbu   Float
+  lingkarPinggangIbu Float
+  alatKontrasepsi    String
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
 }
 
 enum JenisKelamin {
