@@ -1,20 +1,20 @@
 "use server"
 
-import { JenisKelamin } from "@prisma/client" // Enum dari Prisma schema
+import { createClient } from "@/utils/supabase/server"
+import { JenisKelamin } from "@prisma/client"
 
 import db from "@/lib/db"
 
 export async function saveDataLayananIbuAnak(data: {
-  wargaId: string
-  namaIbu: string
-  namaAyah: string
-  namaAnak: string
+  ibuId: string
+  ayahId: string
+  anakId: string
   tinggiBadanIbu: number
   beratBadanIbu: number
   lingkarLenganIbu: number
   lingkarPinggangIbu: number
   alatKontrasepsi: string
-  jenisKelamin: JenisKelamin // Sertakan jenis kelamin
+  jenisKelaminAnak: JenisKelamin // Changed to jenisKelaminAnak
   tinggiBadanAnak: number
   beratBadanAnak: number
   umurAnak: number
@@ -22,27 +22,48 @@ export async function saveDataLayananIbuAnak(data: {
   lingkarKepalaAnak: number
 }) {
   try {
-    // Validasi apakah warga ada di database
-    const warga = await db.warga.findUnique({
-      where: { id: data.wargaId },
+    // Validasi apakah user sudah login
+    const user = await (await createClient()).auth.getUser()
+
+    if (!user) {
+      return {
+        success: false,
+        error: "Anda belum login",
+      }
+    }
+
+    // Validasi apakah warga Ibu, Ayah, dan Anak ada di database
+    const ibu = await db.warga.findUnique({
+      where: { id: data.ibuId },
     })
-    if (!warga) {
-      return { success: false, error: "Warga tidak ditemukan" }
+
+    const ayah = await db.warga.findUnique({
+      where: { id: data.ayahId },
+    })
+
+    const anak = await db.warga.findUnique({
+      where: { id: data.anakId },
+    })
+
+    if (!ibu || !ayah || !anak) {
+      return {
+        success: false,
+        error: "Data Ibu, Ayah, atau Anak tidak ditemukan",
+      }
     }
 
     // Menyimpan data layanan ibu-anak
     await db.layananIbuAnak.create({
       data: {
-        wargaId: data.wargaId,
-        namaIbu: data.namaIbu,
-        namaAyah: data.namaAyah,
-        namaAnak: data.namaAnak,
+        ibuId: data.ibuId,
+        ayahId: data.ayahId,
+        anakId: data.anakId,
         tinggiBadanIbu: data.tinggiBadanIbu,
         beratBadanIbu: data.beratBadanIbu,
         lingkarLenganIbu: data.lingkarLenganIbu,
         lingkarPinggangIbu: data.lingkarPinggangIbu,
         alatKontrasepsi: data.alatKontrasepsi,
-        jenisKelamin: data.jenisKelamin, // Field wajib
+        jenisKelaminAnak: data.jenisKelaminAnak, // Correct field name
         tinggiBadanAnak: data.tinggiBadanAnak,
         beratBadanAnak: data.beratBadanAnak,
         umurAnak: data.umurAnak,
@@ -54,6 +75,15 @@ export async function saveDataLayananIbuAnak(data: {
     return { success: true }
   } catch (error) {
     console.error("Error saving data:", error)
-    return { success: false, error: "Gagal menyimpan data" }
+
+    // Handling error yang lebih spesifik
+    if (error instanceof Error) {
+      return { success: false, error: error.message }
+    }
+
+    return {
+      success: false,
+      error: "Gagal menyimpan data karena error tak terduga",
+    }
   }
 }

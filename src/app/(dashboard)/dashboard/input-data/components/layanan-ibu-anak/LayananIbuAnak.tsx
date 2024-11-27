@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import { useToast } from "@/hooks/use-toast"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -27,78 +28,115 @@ import { getAllDataWarga } from "../../data-warga/action"
 import { ComboboxWarga } from "../ComboboxWarga"
 import { saveDataLayananIbuAnak } from "./action"
 
-// Schema Validation with Zod
 const layananSchema = z.object({
-  wargaId: z.string().min(1, { message: "Warga ID wajib diisi" }),
-  namaIbu: z.string().min(1, { message: "Nama Ibu wajib diisi" }),
-  namaAyah: z.string().min(1, { message: "Nama Ayah wajib diisi" }),
-  namaAnak: z.string().min(1, { message: "Nama Anak wajib diisi" }),
-  jenisKelamin: z.enum(["LAKI_LAKI", "PEREMPUAN"], {
+  ibuId: z.string().min(1, { message: "Ibu ID wajib diisi" }),
+  ayahId: z.string().min(1, { message: "Ayah ID wajib diisi" }),
+  anakId: z.string().min(1, { message: "Anak ID wajib diisi" }),
+  jenisKelaminAnak: z.enum(["LAKI_LAKI", "PEREMPUAN"], {
     errorMap: () => ({ message: "Jenis Kelamin wajib dipilih" }),
   }),
   tinggiBadanIbu: z
-    .number({ invalid_type_error: "Tinggi Badan Ibu harus berupa angka" })
-    .positive({ message: "Tinggi Badan Ibu harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Tinggi Badan Ibu harus berupa angka",
+    }),
   beratBadanIbu: z
-    .number({ invalid_type_error: "Berat Badan Ibu harus berupa angka" })
-    .positive({ message: "Berat Badan Ibu harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Berat Badan Ibu harus berupa angka",
+    }),
   lingkarLenganIbu: z
-    .number({ invalid_type_error: "Lingkar Lengan Ibu harus berupa angka" })
-    .positive({ message: "Lingkar Lengan Ibu harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Lingkar Lengan Ibu harus berupa angka",
+    }),
   lingkarPinggangIbu: z
-    .number({ invalid_type_error: "Lingkar Pinggang Ibu harus berupa angka" })
-    .positive({ message: "Lingkar Pinggang Ibu harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Lingkar Pinggang Ibu harus berupa angka",
+    }),
   alatKontrasepsi: z
     .string()
     .min(1, { message: "Alat Kontrasepsi wajib diisi" }),
   tinggiBadanAnak: z
-    .number({ invalid_type_error: "Tinggi Badan Anak harus berupa angka" })
-    .positive({ message: "Tinggi Badan Anak harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Tinggi Badan Anak harus berupa angka",
+    }),
   beratBadanAnak: z
-    .number({ invalid_type_error: "Berat Badan Anak harus berupa angka" })
-    .positive({ message: "Berat Badan Anak harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Berat Badan Anak harus berupa angka",
+    }),
   umurAnak: z
-    .number({ invalid_type_error: "Umur Anak harus berupa angka" })
-    .positive({ message: "Umur Anak harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), { message: "Umur Anak harus berupa angka" }),
   lingkarLenganAnak: z
-    .number({ invalid_type_error: "Lingkar Lengan Anak harus berupa angka" })
-    .positive({ message: "Lingkar Lengan Anak harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Lingkar Lengan Anak harus berupa angka",
+    }),
   lingkarKepalaAnak: z
-    .number({ invalid_type_error: "Lingkar Kepala Anak harus berupa angka" })
-    .positive({ message: "Lingkar Kepala Anak harus lebih dari 0" }),
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val), {
+      message: "Lingkar Kepala Anak harus berupa angka",
+    }),
 })
 
 type LayananFormValues = z.infer<typeof layananSchema>
 
 export default function LayananIbuAnakForm() {
+  const { toast } = useToast()
+
   const form = useForm<LayananFormValues>({
     resolver: zodResolver(layananSchema),
     defaultValues: {
-      wargaId: "",
-      namaIbu: "",
-      namaAyah: "",
-      namaAnak: "",
-      jenisKelamin: undefined,
-      tinggiBadanIbu: undefined,
-      beratBadanIbu: undefined,
-      lingkarLenganIbu: undefined,
-      lingkarPinggangIbu: undefined,
+      ibuId: "",
+      ayahId: "",
+      anakId: "",
+      jenisKelaminAnak: "LAKI_LAKI",
+      tinggiBadanIbu: 0,
+      beratBadanIbu: 0,
+      lingkarLenganIbu: 0,
+      lingkarPinggangIbu: 0,
       alatKontrasepsi: "",
-      tinggiBadanAnak: undefined,
-      beratBadanAnak: undefined,
-      umurAnak: undefined,
-      lingkarLenganAnak: undefined,
-      lingkarKepalaAnak: undefined,
+      tinggiBadanAnak: 0,
+      beratBadanAnak: 0,
+      umurAnak: 0,
+      lingkarLenganAnak: 0,
+      lingkarKepalaAnak: 0,
     },
   })
 
   const onSubmit = async (data: LayananFormValues) => {
+    console.log("Form errors:", form.formState.errors)
+    console.log("Is form valid?", form.formState.isValid)
+
+    console.log(data)
+
     const result = await saveDataLayananIbuAnak(data)
+
     if (result.success) {
-      alert("Data berhasil disimpan!")
+      toast({
+        title: "Data berhasil disimpan!",
+        description: "Data layanan ibu-anak berhasil disimpan",
+      })
       form.reset()
     } else {
-      alert(`Gagal menyimpan data: ${result.error}`)
+      toast({
+        title: "Gagal menyimpan data!",
+        description: result.error,
+        variant: "destructive",
+      })
     }
   }
 
@@ -136,7 +174,7 @@ export default function LayananIbuAnakForm() {
         {/* Pilih Nama Ibu */}
         <FormField
           control={form.control}
-          name="namaIbu"
+          name="ibuId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <Label>Pilih Nama Ibu</Label>
@@ -148,9 +186,7 @@ export default function LayananIbuAnakForm() {
                   placeholder="Pilih nama ibu..."
                 />
               </FormControl>
-              <FormMessage>
-                {form.formState.errors.namaIbu?.message}
-              </FormMessage>
+              <FormMessage>{form.formState.errors.ibuId?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -242,7 +278,7 @@ export default function LayananIbuAnakForm() {
         {/* Pilih Nama Ayah */}
         <FormField
           control={form.control}
-          name="namaAyah"
+          name="ayahId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <Label>Pilih Nama Ayah</Label>
@@ -254,9 +290,7 @@ export default function LayananIbuAnakForm() {
                   placeholder="Pilih nama ayah..."
                 />
               </FormControl>
-              <FormMessage>
-                {form.formState.errors.namaAyah?.message}
-              </FormMessage>
+              <FormMessage>{form.formState.errors.ayahId?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -264,7 +298,7 @@ export default function LayananIbuAnakForm() {
         {/* Pilih Nama Anak/Balita */}
         <FormField
           control={form.control}
-          name="namaAnak"
+          name="anakId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <Label>Pilih Nama Anak/Balita</Label>
@@ -276,35 +310,34 @@ export default function LayananIbuAnakForm() {
                   placeholder="Pilih nama anak/balita..."
                 />
               </FormControl>
-              <FormMessage>
-                {form.formState.errors.namaAnak?.message}
-              </FormMessage>
+              <FormMessage>{form.formState.errors.anakId?.message}</FormMessage>
             </FormItem>
           )}
         />
 
         <FormField
           control={form.control}
-          name="jenisKelamin"
+          name="jenisKelaminAnak"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <Label>Jenis Kelamin Anak</Label>
               <FormControl>
                 <Select
                   value={field.value}
-                  onValueChange={(value) => field.onChange(value)}
+                  onValueChange={field.onChange}
+                  defaultValue="LAKI_LAKI"
                 >
-                  <SelectTrigger className="border border-primary">
+                  <SelectTrigger>
                     <SelectValue placeholder="Pilih jenis kelamin" />
                   </SelectTrigger>
-                  <SelectContent className="border border-primary">
-                    <SelectItem value="LAKI_LAKI">Laki-Laki</SelectItem>
+                  <SelectContent>
+                    <SelectItem value="LAKI_LAKI">Laki-laki</SelectItem>
                     <SelectItem value="PEREMPUAN">Perempuan</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
               <FormMessage>
-                {form.formState.errors.jenisKelamin?.message}
+                {form.formState.errors.jenisKelaminAnak?.message}
               </FormMessage>
             </FormItem>
           )}

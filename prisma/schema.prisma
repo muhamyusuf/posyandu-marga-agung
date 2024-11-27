@@ -9,16 +9,18 @@ datasource db {
 }
 
 model Warga {
-  id             String           @id @default(uuid())
-  nama           String
-  nik            String           @unique
-  tanggalLahir   DateTime
-  umur           Int
-  LayananLansia  LayananLansia[]
-  LayananIbuAnak LayananIbuAnak[]
-  dusun          String?
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  id                 String           @id @default(uuid())
+  nama               String
+  nik                String           @unique
+  tanggalLahir       DateTime
+  umur               Int
+  LayananLansia      LayananLansia[] // Relasi dengan LayananLansia
+  LayananIbuAnakIbu  LayananIbuAnak[] @relation("Ibu") // Relasi untuk ibu
+  LayananIbuAnakAyah LayananIbuAnak[] @relation("Ayah") // Relasi untuk ayah
+  LayananIbuAnakAnak LayananIbuAnak[] @relation("Anak") // Relasi untuk anak
+  dusun              String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
 }
 
 model LayananLansia {
@@ -42,12 +44,13 @@ model LayananLansia {
 
 model LayananIbuAnak {
   id                 String       @id @default(uuid())
-  wargaId            String
-  warga              Warga        @relation(fields: [wargaId], references: [id])
-  jenisKelamin       JenisKelamin
-  namaIbu            String
-  namaAyah           String
-  namaAnak           String
+  ibuId              String
+  ayahId             String
+  anakId             String
+  ibu                Warga        @relation("Ibu", fields: [ibuId], references: [id])
+  ayah               Warga        @relation("Ayah", fields: [ayahId], references: [id])
+  anak               Warga        @relation("Anak", fields: [anakId], references: [id])
+  jenisKelaminAnak   JenisKelamin
   tinggiBadanAnak    Float? // Optional
   beratBadanAnak     Float? // Optional
   umurAnak           Float? // Optional

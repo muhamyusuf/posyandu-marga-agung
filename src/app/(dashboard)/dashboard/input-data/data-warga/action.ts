@@ -40,7 +40,7 @@ export async function saveDataWarga({
     })
 
     // Revalidasi path untuk memastikan data baru tampil
-    revalidatePath("/(dashboard)/dashboard/input-data/data-warga")
+    revalidatePath("(dashboard)/dashboard/input-data/data-warga")
     return { success: true }
   } catch (error) {
     console.error("Terjadi kesalahan saat menyimpan data warga:", error)
@@ -53,7 +53,9 @@ export async function getAllDataWarga() {
     const wargaList = await db.warga.findMany({
       include: {
         LayananLansia: true,
-        LayananIbuAnak: true,
+        LayananIbuAnakAnak: true,
+        LayananIbuAnakIbu: true,
+        LayananIbuAnakAyah: true,
       },
     })
 
