@@ -1,7 +1,5 @@
 "use client"
 
-// Import necessary libraries and ShadCN components
-import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -17,6 +15,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 import { saveDataWarga } from "./action"
 
@@ -31,6 +36,7 @@ const wargaSchema = z
     tanggalLahir: z.string().refine((value) => !isNaN(Date.parse(value)), {
       message: "Tanggal Lahir tidak valid",
     }),
+    dusun: z.string().min(1, { message: "Dusun wajib dipilih" }),
   })
   .superRefine((data, ctx) => {
     Object.keys(data).forEach((key) => {
@@ -50,14 +56,12 @@ const wargaSchema = z
 export type WargaFormValues = z.infer<typeof wargaSchema>
 
 export default function InputDataWarga() {
-  const router = useRouter()
   const form = useForm<WargaFormValues>({
     resolver: zodResolver(wargaSchema),
     mode: "onChange", // Enable real-time validation
   })
 
   const onSubmit = async (data: WargaFormValues) => {
-    // Calculate age based on tanggalLahir
     const age =
       new Date().getFullYear() - new Date(data.tanggalLahir).getFullYear()
     const wargaDataWithAge = {
@@ -91,7 +95,7 @@ export default function InputDataWarga() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="mt-10 flex min-w-[300px] flex-col rounded-md sm:min-w-[400px]"
+          className="mt-10 flex w-[300px] flex-col space-y-1 rounded-md sm:w-[400px]"
         >
           {/* Nama Field */}
           <FormField
@@ -99,7 +103,7 @@ export default function InputDataWarga() {
             name="nama"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="nama">Nama</Label>
+                <Label htmlFor="nama">Nama Lengkap</Label>
                 <FormControl>
                   <Input
                     id="nama"
@@ -118,7 +122,7 @@ export default function InputDataWarga() {
             name="nik"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="nik">NIK</Label>
+                <Label htmlFor="nik">NIK (Nomor Induk Kependudukan)</Label>
                 <FormControl>
                   <Input
                     id="nik"
@@ -153,14 +157,42 @@ export default function InputDataWarga() {
             )}
           />
 
+          {/* Dusun Field */}
+          <FormField
+            control={form.control}
+            name="dusun"
+            render={({ field }) => (
+              <FormItem>
+                <Label htmlFor="dusun">Dusun</Label>
+                <FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger id="dusun">
+                      <SelectValue placeholder="Pilih dusun" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Dusun A">Dusun A</SelectItem>
+                      <SelectItem value="Dusun B">Dusun B</SelectItem>
+                      <SelectItem value="Dusun C">Dusun C</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage>
+                  {form.formState.errors.dusun?.message}
+                </FormMessage>
+              </FormItem>
+            )}
+          />
+
+          <div className="flex w-full">
+            <Button
+              type="submit"
+              className="mt-5 w-full"
+              disabled={!form.formState.isValid || form.formState.isSubmitting}
+            >
+              {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
+            </Button>
+          </div>
           {/* Submit Button */}
-          <Button
-            type="submit"
-            className="mt-5"
-            disabled={!form.formState.isValid || form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? "Menyimpan..." : "Simpan Data"}
-          </Button>
         </form>
       </Form>
     </main>

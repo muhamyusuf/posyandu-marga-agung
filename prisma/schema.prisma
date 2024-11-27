@@ -14,8 +14,9 @@ model Warga {
   nik            String           @unique
   tanggalLahir   DateTime
   umur           Int
-  layananLansia  LayananLansia[]
+  LayananLansia  LayananLansia[]
   LayananIbuAnak LayananIbuAnak[]
+  dusun          String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
 }
@@ -27,14 +28,14 @@ model LayananLansia {
   nama         String
   nik          String
   ttl          String
-  beratBadan   Float
-  tinggiBadan  Float
-  tensiDarah   String
-  lingkarPerut Float
-  kolesterol   Float
-  gulaDarah    Float
-  asamUrat     Float
-  keterangan   String
+  beratBadan   Float? // Optional
+  tinggiBadan  Float? // Optional
+  tensiDarah   String? // Optional
+  lingkarPerut Float? // Optional
+  kolesterol   Float? // Optional
+  gulaDarah    Float? // Optional
+  asamUrat     Float? // Optional
+  keterangan   String? // Optional
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -47,16 +48,16 @@ model LayananIbuAnak {
   namaIbu            String
   namaAyah           String
   namaAnak           String
-  tinggiBadanAnak    Float
-  beratBadanAnak     Float
-  umurAnak           Float
-  lingkarLenganAnak  Float
-  lingkarKepalaAnak  Float
-  tinggiBadanIbu     Float
-  beratBadanIbu      Float
-  lingkarLenganIbu   Float
-  lingkarPinggangIbu Float
-  alatKontrasepsi    String
+  tinggiBadanAnak    Float? // Optional
+  beratBadanAnak     Float? // Optional
+  umurAnak           Float? // Optional
+  lingkarLenganAnak  Float? // Optional
+  lingkarKepalaAnak  Float? // Optional
+  tinggiBadanIbu     Float? // Optional
+  beratBadanIbu      Float? // Optional
+  lingkarLenganIbu   Float? // Optional
+  lingkarPinggangIbu Float? // Optional
+  alatKontrasepsi    String? // Optional
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 }

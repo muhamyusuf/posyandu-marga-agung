@@ -26,12 +26,17 @@ export default async function DashboardPage() {
         <h2 className="font-bold">Report Data Posyandu</h2>
       </div>
 
-      <div className="mt-10 flex flex-wrap justify-center gap-2 md:justify-start">
-        <ChartDemo3 />
-        <ChartDemo5 />
-        <ChartDemo6 />
-        <ChartDemo1 />
-        <ChartDemo2 />
+      <div className="mt-10 flex flex-wrap justify-center gap-1 md:justify-start">
+        <div className="flex flex-col gap-1 md:flex-row">
+          <ChartDemo3 />
+          <ChartDemo5 />
+          <ChartDemo6 />
+        </div>
+
+        <div className="flex flex-col gap-1 md:flex-row">
+          <ChartDemo1 />
+          <ChartDemo2 />
+        </div>
       </div>
 
       <div className="mt-2 w-full">

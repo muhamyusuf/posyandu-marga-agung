@@ -1,46 +1,49 @@
 "use server"
-import db from "@/lib/db"
-import { revalidatePath } from "next/cache"
 
-export async function saveDataLayananLansia({
-  wargaId,
-  gds,
-  beratBadan,
-  tinggiBadan,
-  lingkarPinggang,
-  tekananDarah,
-}: {
+import db from "@/lib/db"
+
+export async function saveDataLayananLansia(data: {
   wargaId: string
-  gds: number
+  nama: string
+  nik: string
+  ttl: string
   beratBadan: number
   tinggiBadan: number
-  lingkarPinggang: number
-  tekananDarah: string
+  tensiDarah: string
+  lingkarPerut: number
+  kolesterol: number
+  gulaDarah: number
+  asamUrat: number
+  keterangan?: string
 }) {
   try {
     const warga = await db.warga.findUnique({
-      where: { id: wargaId },
+      where: { id: data.wargaId },
     })
-
     if (!warga) {
-      return { success: false, error: "Data warga tidak ditemukan" }
+      return { success: false, error: "Warga tidak ditemukan" }
     }
 
     await db.layananLansia.create({
       data: {
-        wargaId: warga.id,
-        gds,
-        beratBadan,
-        tinggiBadan,
-        lingkarPinggang,
-        tekananDarah,
+        wargaId: data.wargaId,
+        nama: data.nama,
+        nik: data.nik,
+        ttl: data.ttl,
+        beratBadan: data.beratBadan,
+        tinggiBadan: data.tinggiBadan,
+        tensiDarah: data.tensiDarah,
+        lingkarPerut: data.lingkarPerut,
+        kolesterol: data.kolesterol,
+        gulaDarah: data.gulaDarah,
+        asamUrat: data.asamUrat,
+        keterangan: data.keterangan || "",
       },
     })
 
-    revalidatePath("/(dashboard)/dashboard/input-data/layanan-lansia")
     return { success: true }
   } catch (error) {
-    console.error("Terjadi kesalahan saat menyimpan data:", error)
+    console.error("Error saving data:", error)
     return { success: false, error: "Gagal menyimpan data" }
   }
 }

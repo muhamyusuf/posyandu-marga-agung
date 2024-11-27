@@ -2,22 +2,10 @@
 
 import React, { useEffect, useState } from "react"
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-// Importing ShadCN Select components
-
-import InputDataLayananAnak from "./components/layanan-anak/InputDataLayananAnak"
-import InputDataLayananCalonPengantin from "./components/layanan-calon-pengantin/InputDataLayananCalonPengantin"
-import InputDataLayananIbuHamil from "./components/layanan-ibu-hamil/InputDataLayananIbuHamil"
-import InputDataLayananKeluarga from "./components/layanan-keluarga/InputDataLayananKeluarga"
-import InputDataLayananLansia from "./components/layanan-lansia/InputDataLayananLansia"
-import InputDataLayananRemajaPutri from "./components/layanan-remaja-putri/InputDataLayananRemajaPutri"
+import LayananIbuAnak from "./components/layanan-ibu-anak/LayananIbuAnak"
+import LayananLansiaForm from "./components/layanan-lansia/LayananLansia"
 
 function Skeleton() {
   return (
@@ -30,67 +18,50 @@ function Skeleton() {
 }
 
 export default function InputDataPage() {
-  const [selectedLayanan, setSelectedLayanan] = useState("keluarga")
+  const [selectedTab, setSelectedTab] = useState("keluarga")
   const [loading, setLoading] = useState(true)
 
-  // Load selectedLayanan from localStorage on initial load
   useEffect(() => {
-    const storedLayanan = localStorage.getItem("selectedLayanan")
-    if (storedLayanan) {
-      setSelectedLayanan(storedLayanan)
+    const storedTab = localStorage.getItem("selectedTab")
+    if (storedTab) {
+      setSelectedTab(storedTab)
     }
-    setLoading(false) // Initial load complete, hide skeleton
+    setLoading(false)
   }, [])
 
-  // Show skeleton while loading a new form
-  const handleLayananChange = (value: string) => {
-    setSelectedLayanan(value)
-    localStorage.setItem("selectedLayanan", value)
+  const handleTabChange = (value: string) => {
+    setSelectedTab(value)
+    localStorage.setItem("selectedTab", value)
   }
 
   return (
     <main className="min-h-screen w-full">
-      <div className="mb-4">
-        <label className="mb-1 block text-sm font-semibold">
-          Pilih Layanan
-        </label>
+      <div className="mb-6">
+        <h1 className="text-lg font-semibold">Pilih Jenis Layanan</h1>
 
-        {/* ShadCN Select Component */}
-        <Select onValueChange={handleLayananChange} value={selectedLayanan}>
-          <SelectTrigger className="min-w-[300px] max-w-[400px]">
-            <SelectValue placeholder="Pilih Layanan" />
-          </SelectTrigger>
+        {/* Tabs from ShadCN */}
+        <Tabs
+          value={selectedTab}
+          onValueChange={handleTabChange}
+          className="mt-4"
+        >
+          <TabsList className="flex w-[310px] sm:w-[400px]">
+            <TabsTrigger value="anak" className="w-full">
+              Layanan Ibu & Anak
+            </TabsTrigger>
+            <TabsTrigger value="lansia" className="w-full">
+              Layanan Lansia
+            </TabsTrigger>
+          </TabsList>
 
-          <SelectContent>
-            <SelectItem value="keluarga">Layanan Keluarga</SelectItem>
-            <SelectItem value="remaja_putri">Layanan Remaja Putri</SelectItem>
-            <SelectItem value="ibu_hamil">Layanan Ibu Hamil</SelectItem>
-            <SelectItem value="calon_pengantin">
-              Layanan Calon Pengantin
-            </SelectItem>
-            <SelectItem value="anak">Layanan Anak</SelectItem>
-            <SelectItem value="lansia">Layanan Lansia</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="min-w-[300px] sm:min-w-[400px]">
-        {/* Conditional Rendering with Loading Skeleton */}
-        {loading ? (
-          <Skeleton />
-        ) : selectedLayanan === "keluarga" ? (
-          <InputDataLayananKeluarga />
-        ) : selectedLayanan === "remaja_putri" ? (
-          <InputDataLayananRemajaPutri />
-        ) : selectedLayanan === "calon_pengantin" ? (
-          <InputDataLayananCalonPengantin />
-        ) : selectedLayanan === "ibu_hamil" ? (
-          <InputDataLayananIbuHamil />
-        ) : selectedLayanan === "anak" ? (
-          <InputDataLayananAnak />
-        ) : (
-          <InputDataLayananLansia />
-        )}
+          {/* Tabs Content */}
+          <TabsContent value="anak">
+            {loading ? <Skeleton /> : <LayananIbuAnak />}
+          </TabsContent>
+          <TabsContent value="lansia">
+            {loading ? <Skeleton /> : <LayananLansiaForm />}
+          </TabsContent>
+        </Tabs>
       </div>
     </main>
   )
