@@ -35,61 +35,45 @@ const layananSchema = z.object({
   jenisKelaminAnak: z.enum(["LAKI_LAKI", "PEREMPUAN"], {
     errorMap: () => ({ message: "Jenis Kelamin wajib dipilih" }),
   }),
-  tinggiBadanIbu: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Tinggi Badan Ibu harus berupa angka",
-    }),
-  beratBadanIbu: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Berat Badan Ibu harus berupa angka",
-    }),
-  lingkarLenganIbu: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Lingkar Lengan Ibu harus berupa angka",
-    }),
-  lingkarPinggangIbu: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Lingkar Pinggang Ibu harus berupa angka",
-    }),
+  tinggiBadanIbu: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Tinggi Badan Ibu harus lebih dari 0" })
+  ),
+  beratBadanIbu: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Berat Badan Ibu harus lebih dari 0" })
+  ),
+  lingkarLenganIbu: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Lingkar Lengan Ibu harus lebih dari 0" })
+  ),
+  lingkarPinggangIbu: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Lingkar Pinggang Ibu harus lebih dari 0" })
+  ),
   alatKontrasepsi: z
     .string()
     .min(1, { message: "Alat Kontrasepsi wajib diisi" }),
-  tinggiBadanAnak: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Tinggi Badan Anak harus berupa angka",
-    }),
-  beratBadanAnak: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Berat Badan Anak harus berupa angka",
-    }),
-  umurAnak: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), { message: "Umur Anak harus berupa angka" }),
-  lingkarLenganAnak: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Lingkar Lengan Anak harus berupa angka",
-    }),
-  lingkarKepalaAnak: z
-    .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val), {
-      message: "Lingkar Kepala Anak harus berupa angka",
-    }),
+  tinggiBadanAnak: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Tinggi Badan Anak harus lebih dari 0" })
+  ),
+  beratBadanAnak: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Berat Badan Anak harus lebih dari 0" })
+  ),
+  umurAnak: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(0.1, { message: "Umur Anak harus lebih dari 0" })
+  ),
+  lingkarLenganAnak: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Lingkar Lengan Anak harus lebih dari 0" })
+  ),
+  lingkarKepalaAnak: z.preprocess(
+    (val) => parseFloat(val as string), // preprocess to number
+    z.number().min(1, { message: "Lingkar Kepala Anak harus lebih dari 0" })
+  ),
 })
 
 type LayananFormValues = z.infer<typeof layananSchema>
@@ -118,11 +102,6 @@ export default function LayananIbuAnakForm() {
   })
 
   const onSubmit = async (data: LayananFormValues) => {
-    console.log("Form errors:", form.formState.errors)
-    console.log("Is form valid?", form.formState.isValid)
-
-    console.log(data)
-
     const result = await saveDataLayananIbuAnak(data)
 
     if (result.success) {

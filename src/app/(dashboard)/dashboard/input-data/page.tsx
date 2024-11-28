@@ -18,7 +18,7 @@ function Skeleton() {
 }
 
 export default function InputDataPage() {
-  const [selectedTab, setSelectedTab] = useState("keluarga")
+  const [selectedTab, setSelectedTab] = useState("ibuanak")
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function InputDataPage() {
           className="mt-4"
         >
           <TabsList className="flex w-[310px] sm:w-[400px]">
-            <TabsTrigger value="anak" className="w-full">
+            <TabsTrigger value="ibuanak" className="w-full">
               Layanan Ibu & Anak
             </TabsTrigger>
             <TabsTrigger value="lansia" className="w-full">
@@ -55,7 +55,7 @@ export default function InputDataPage() {
           </TabsList>
 
           {/* Tabs Content */}
-          <TabsContent value="anak">
+          <TabsContent value="ibuanak">
             {loading ? <Skeleton /> : <LayananIbuAnak />}
           </TabsContent>
           <TabsContent value="lansia">
